@@ -1,0 +1,234 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-ink-950 font-sans text-ink-100 antialiased;
+    background-image:
+      radial-gradient(70rem 40rem at 50% -24rem, rgba(226, 179, 84, 0.12), transparent 58%),
+      radial-gradient(50rem 24rem at 50% 120%, rgba(141, 159, 201, 0.08), transparent 62%),
+      linear-gradient(to right, rgba(255, 255, 255, 0.022) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.022) 1px, transparent 1px);
+    background-size: auto, auto, 96px 96px, 96px 96px;
+    background-attachment: fixed;
+    min-height: 100dvh;
+  }
+
+  a,
+  button {
+    transition:
+      color 180ms ease,
+      background-color 180ms ease,
+      border-color 180ms ease,
+      box-shadow 180ms ease,
+      transform 240ms ease;
+  }
+
+  img {
+    display: block;
+    max-width: 100%;
+  }
+
+  /* Amharic runs need a little extra room — Ethiopic glyphs sit taller. */
+  :lang(am),
+  .ethiopic {
+    font-family: theme(fontFamily.ethiopic);
+    line-height: 1.7;
+  }
+
+  ::selection {
+    background: rgba(226, 179, 84, 0.28);
+    color: #fff;
+  }
+
+  :focus-visible {
+    outline: 2px solid theme(colors.gold.500);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #04060b;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #1a2233;
+    border-radius: 999px;
+    border: 2px solid #04060b;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #26304a;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* Layered dark surface used by almost every panel. */
+  .surface {
+    @apply rounded-xl2 border border-white/[0.08] bg-ink-850/80 shadow-[0_20px_50px_-30px_rgba(0,0,0,0.85)] backdrop-blur-[2px];
+  }
+
+  .surface-hover {
+    @apply transition-all duration-300 hover:-translate-y-0.5 hover:border-white/16 hover:bg-ink-800/90 hover:shadow-[0_24px_50px_-26px_rgba(0,0,0,0.9)];
+  }
+
+  .premium-card {
+    @apply relative overflow-hidden rounded-xl3 border border-white/[0.08] bg-ink-850/75 shadow-soft backdrop-blur-sm;
+  }
+
+  .premium-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(226, 179, 84, 0.10), transparent 42%, rgba(255, 255, 255, 0.04));
+    opacity: 0;
+    transition: opacity 220ms ease;
+    pointer-events: none;
+  }
+
+  .premium-card:hover::before {
+    opacity: 1;
+  }
+
+  .hairline {
+    @apply border-white/[0.08];
+  }
+
+  /* Fade/rise entrance used across sections. */
+  .reveal {
+    @apply animate-fade-up motion-reduce:animate-none;
+  }
+
+  .prose-editorial {
+    @apply text-[15px] leading-[1.9] text-ink-100 sm:text-[17px];
+  }
+
+  .prose-editorial > p + p {
+    @apply mt-6;
+  }
+
+  .prose-editorial > p:first-of-type {
+    @apply text-[17px] leading-[1.85] text-white sm:text-[19px];
+  }
+
+  .field {
+    @apply w-full rounded-xl border border-white/10 bg-ink-900/80 px-4 py-3 text-sm text-white placeholder:text-ink-400 transition-colors focus:border-gold-500/60 focus:outline-none focus:ring-2 focus:ring-gold-500/25;
+  }
+
+  .field-label {
+    @apply mb-2 block text-[11px] font-medium uppercase tracking-wider2 text-ink-300;
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full border border-white/[0.12] px-3 py-1.5 text-xs text-ink-200 transition-colors hover:border-white/25 hover:text-white;
+  }
+
+  .chip-active {
+    @apply border-gold-500/60 bg-gold-500/12 text-gold-400 hover:border-gold-500/70;
+  }
+
+  .card-hover-lift {
+    @apply transition-all duration-500 ease-out motion-safe:hover:-translate-y-1.5 motion-safe:hover:shadow-[0_26px_60px_-28px_rgba(0,0,0,0.9)];
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .text-pretty {
+    text-wrap: pretty;
+  }
+
+  .map-tiles {
+    filter: saturate(0.85) contrast(1.05) brightness(0.92);
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+/* Leaflet needs a few overrides to sit inside the dark interface. */
+.leaflet-container {
+  background: #04060b;
+  font-family: inherit;
+}
+
+.leaflet-control-attribution {
+  background: rgba(4, 6, 11, 0.72) !important;
+  color: #9aa8c2 !important;
+  font-size: 10px !important;
+  backdrop-filter: blur(6px);
+}
+
+.leaflet-control-attribution a {
+  color: #cbd4e4 !important;
+}
+
+.leaflet-bar,
+.leaflet-control-zoom {
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  border-radius: 10px !important;
+  overflow: hidden;
+  box-shadow: none !important;
+}
+
+.leaflet-control-zoom a {
+  background: rgba(10, 14, 24, 0.92) !important;
+  color: #cbd4e4 !important;
+  border-bottom-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.leaflet-control-zoom a:hover {
+  background: rgba(26, 34, 51, 0.95) !important;
+  color: #fff !important;
+}
+
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+  background: #0d121e;
+  color: #cbd4e4;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 30px 80px -40px rgba(0, 0, 0, 0.95);
+}
+
+.leaflet-popup-content {
+  margin: 12px 14px;
+  font-size: 12px;
+}
+
+.e360-marker {
+  background: transparent;
+  border: 0;
+}
