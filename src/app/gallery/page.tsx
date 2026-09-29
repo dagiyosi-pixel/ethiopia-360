@@ -1,15 +1,19 @@
 import { PageHeader } from "@/components/ui/SectionHeading";
 import { MediaCard } from "@/components/cards/MediaCard";
-import { media } from "@/data/media";
-import { contributors } from "@/data/contributors";
+import { listContributors, listMedia } from "@/lib/data/queries";
 
-export default function GalleryPage() {
+export default async function GalleryPage() {
+  const [{ items: media, source }, { items: contributors }] = await Promise.all([
+    listMedia(),
+    listContributors(),
+  ]);
+
   return (
     <div>
       <PageHeader
         eyebrow="Gallery"
         title="Photo and video records"
-        lede="The gallery brings together uploaded media and generated placeholders for the visual archive."
+        lede={`The gallery brings together ${source === "supabase" ? "published community uploads and curated records" : "curated records and generated placeholders"} from across the atlas.`}
       />
 
       <div className="mx-auto max-w-shell px-4 py-10 sm:px-8">

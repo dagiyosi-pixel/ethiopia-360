@@ -30,7 +30,7 @@ const UNCONFIGURED: UploadOutcome = {
 };
 
 /** Types that require attached media. */
-const MEDIA_TYPES: ContentType[] = ["photo", "video", "place", "event"];
+const MEDIA_TYPES: ContentType[] = ["photo", "video"];
 
 export async function submitUploadAction(form: FormData): Promise<UploadOutcome> {
   const user = await getSessionUser();
@@ -80,18 +80,8 @@ export async function submitUploadAction(form: FormData): Promise<UploadOutcome>
     };
   }
 
-  // Re-validate declared files server side — never trust the client.
-  const declared = form
-    .getAll("filemeta")
-    .filter((value): value is string => typeof value === "string")
-    .map((raw) => {
-      try {
-        return JSON.parse(raw) as { name: string; size: number; type: string };
-      } catch {
-        return null;
-      }
-    })
-    .filter((value): value is { name: string; size: number; type: string } => value !== null);
+  // Re-validate declared files server side , never trust the client.
+  const declared = form.getAll("file").filter((value): value is File => value instanceof File && value.size > 0);
 
   if (MEDIA_TYPES.includes(draft.type) && declared.length === 0) {
     return {
@@ -188,7 +178,7 @@ export async function submitUploadAction(form: FormData): Promise<UploadOutcome>
 
   let insertError: string | null = null;
 
-  if (draft.type === "story") {
+  if (draft.type === "story" || draft.type === "event") {
     const paragraphs = sanitizeText(draft.storyBody, 20000)
       .split(/\n{2,}/)
       .map((p) => p.trim())
@@ -201,10 +191,12 @@ export async function submitUploadAction(form: FormData): Promise<UploadOutcome>
       author_id: user.id,
       region_id: regionRow?.id ?? null,
       city_id: cityRow?.id ?? null,
-      category: draft.category,
+      lat: draft.coords?.lat ?? null,
+      lng: draft.coords?.lng ?? null,
+      category: draft.type === "event" ? "events" : draft.category,
       tags: draft.tags,
       read_minutes: Math.max(1, Math.round(paragraphs.join(" ").split(/\s+/).length / 220)),
-      status: "published",
+      status: "pending",
       published_at: new Date().toISOString(),
     });
     insertError = error?.message ?? null;
@@ -214,15 +206,40 @@ export async function submitUploadAction(form: FormData): Promise<UploadOutcome>
       name: title,
       summary,
       description: [body],
-      category: draft.category === "places" ? "landmark" : draft.category,
+      category: ["nature", "heritage", "urban", "religious", "market", "landmark"].includes(draft.category)
+        ? draft.category
+        : "landmark",
       region_id: regionRow?.id ?? null,
       city_id: cityRow?.id ?? null,
       contributor_id: user.id,
+      image_url: publicUrl(uploadedPaths[0] ?? null),
+      image_source: draft.attribution || null,
+      image_alt: title,
       tags: draft.tags,
       lat: draft.coords?.lat ?? null,
       lng: draft.coords?.lng ?? null,
-      status: "published",
+      status: "pending",
     });
+    insertError = error?.message ?? null;
+  } else if (["history", "culture", "architecture"].includes(draft.type)) {
+    const common = {
+      slug,
+      region_id: regionRow?.id ?? null,
+      city_id: cityRow?.id ?? null,
+      lat: draft.coords?.lat ?? null,
+      lng: draft.coords?.lng ?? null,
+      author_id: user.id,
+      image_url: publicUrl(uploadedPaths[0] ?? null),
+      image_source: draft.attribution || null,
+      image_alt: title,
+      tags: draft.tags,
+      status: "pending",
+    };
+    const { error } = draft.type === "history"
+      ? await supabase.from("historical_entries").insert({ ...common, title, summary, detail: [body], location: draft.citySlug || draft.regionSlug, source_note: draft.attribution })
+      : draft.type === "culture"
+        ? await supabase.from("culture_topics").insert({ ...common, name: title, category: "Traditions", summary, description: [body], source_note: draft.attribution })
+        : await supabase.from("architecture_entries").insert({ ...common, name: title, category: "historic", era: "", summary, description: [body] });
     insertError = error?.message ?? null;
   } else {
     const firstPath = uploadedPaths[0] ?? null;
@@ -239,7 +256,7 @@ export async function submitUploadAction(form: FormData): Promise<UploadOutcome>
       asset_url: publicUrl(firstPath),
       poster_url: draft.type === "video" ? publicUrl(uploadedPaths[1] ?? null) : null,
       orientation: "landscape",
-      status: "published",
+      status: "pending",
       lat: draft.coords?.lat ?? null,
       lng: draft.coords?.lng ?? null,
     });
@@ -247,7 +264,7 @@ export async function submitUploadAction(form: FormData): Promise<UploadOutcome>
   }
 
   if (insertError) {
-    // The binaries are useless without a row — clean them up.
+    // The binaries are useless without a row , clean them up.
     if (uploadedPaths.length) {
       await supabase.storage.from(STORAGE_BUCKET).remove(uploadedPaths);
     }
@@ -260,7 +277,7 @@ export async function submitUploadAction(form: FormData): Promise<UploadOutcome>
   return {
     ok: true,
     code: "ok",
-    message: "Published. Thank you for contributing to the archive.",
+    message: "Submitted for review. Thank you for contributing to the archive.",
     data: { slug, storagePaths: uploadedPaths },
   };
 }

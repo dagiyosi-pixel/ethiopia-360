@@ -28,7 +28,7 @@ export async function updateSession(request: NextRequest) {
   });
 
   // Must be called to keep the session fresh. Do not add logic between
-  // createServerClient and getUser — it can invalidate the refreshed token.
+  // createServerClient and getUser , it can invalidate the refreshed token.
   await supabase.auth.getUser();
 
   return response;

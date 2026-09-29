@@ -129,7 +129,7 @@ export async function updateAvatarAction(form: FormData): Promise<ProfileOutcome
 }
 
 /**
- * Account deletion request. We never delete immediately from the client — this
+ * Account deletion request. We never delete immediately from the client , this
  * marks the profile for review, which is also the moderation-friendly path.
  */
 export async function requestAccountDeletionAction(form: FormData): Promise<ProfileOutcome> {

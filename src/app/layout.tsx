@@ -9,7 +9,7 @@ import { SITE } from "@/lib/site";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
   title: {
-    default: `${SITE.name} — Discover Ethiopia`,
+    default: `${SITE.name} , Discover Ethiopia`,
     template: `%s · ${SITE.name}`,
   },
   description: SITE.description,
@@ -29,13 +29,13 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: SITE.name,
-    title: `${SITE.name} — One country. Thousands of stories.`,
+    title: `${SITE.name} , One country. Thousands of stories.`,
     description: SITE.description,
     locale: "en",
   },
   twitter: {
     card: "summary_large_image",
-    title: `${SITE.name} — One country. Thousands of stories.`,
+    title: `${SITE.name} , One country. Thousands of stories.`,
     description: SITE.description,
   },
   robots: { index: true, follow: true },

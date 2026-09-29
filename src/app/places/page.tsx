@@ -1,10 +1,13 @@
 import { PageHeader } from "@/components/ui/SectionHeading";
 import { PlaceCard } from "@/components/cards/PlaceCard";
-import { places } from "@/data/places";
-import { cities } from "@/data/cities";
-import { regions } from "@/data/regions";
+import { listCities, listPlaces, listRegions } from "@/lib/data/queries";
 
-export default function PlacesPage() {
+export default async function PlacesPage() {
+  const [{ items: places }, { items: cities }, { items: regions }] = await Promise.all([
+    listPlaces(),
+    listCities(),
+    listRegions(),
+  ]);
   return (
     <div>
       <PageHeader

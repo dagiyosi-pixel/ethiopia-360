@@ -55,7 +55,7 @@ export function UserMenu({ user }: { user: UserMenuUser }) {
       {open && (
         <div
           role="menu"
-          className="absolute right-0 top-[calc(100%+0.6rem)] w-60 animate-fade-up overflow-hidden rounded-2xl border border-white/10 bg-ink-850/98 p-1.5 shadow-lift backdrop-blur-xl"
+          className="absolute right-0 top-[calc(100%+0.6rem)] w-60 animate-fade-up overflow-hidden rounded-2xl border border-white/10 bg-ink-850/95 p-1.5 shadow-lift backdrop-blur-xl"
         >
           <div className="border-b border-white/[0.08] px-3 py-2.5">
             <p className="truncate text-sm font-medium text-white">{user.displayName}</p>

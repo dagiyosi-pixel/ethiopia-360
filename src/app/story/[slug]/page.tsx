@@ -1,12 +1,13 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ArrowRight, Bookmark, Clock3, Heart, MessageCircle } from "lucide-react";
+import { ArrowRight, Bookmark, Clock3, ExternalLink, Heart, MapPin, MessageCircle, Navigation } from "lucide-react";
 import { PageHeader } from "@/components/ui/SectionHeading";
 import { Badge } from "@/components/ui/Badge";
 import { MediaFrame } from "@/components/visual/MediaFrame";
 import { StoryCard } from "@/components/cards/StoryCard";
 import { getStory, getContributor, getRelatedStories, getRegion } from "@/lib/data/queries";
 import { formatCompact } from "@/lib/utils";
+import { googleMapsDirectionsHref, googleMapsPlaceHref, markerMapHref } from "@/lib/map-links";
 
 export async function generateStaticParams() {
   const { stories } = await import("@/data/stories");
@@ -56,6 +57,11 @@ export default async function StoryPage({ params }: { params: Promise<{ slug: st
                 <Badge key={tag} tone="neutral">{tag}</Badge>
               ))}
             </div>
+            {story.coords && <div className="mt-6 flex flex-wrap gap-2">
+              <Link href={markerMapHref("story", story.slug, "story")} className="inline-flex items-center gap-1.5 rounded-full border border-gold-500/40 bg-gold-500/10 px-3.5 py-2 text-xs text-gold-200 hover:bg-gold-500/20"><MapPin aria-hidden className="h-3.5 w-3.5" /> View on map</Link>
+              <a href={googleMapsPlaceHref(story.coords)} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 rounded-full border border-white/15 px-3.5 py-2 text-xs text-ink-100 hover:border-gold-500/50">Google Maps <ExternalLink aria-hidden className="h-3.5 w-3.5" /></a>
+              <a href={googleMapsDirectionsHref(story.coords)} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 rounded-full border border-white/15 px-3.5 py-2 text-xs text-ink-100 hover:border-gold-500/50">Directions <Navigation aria-hidden className="h-3.5 w-3.5" /></a>
+            </div>}
           </aside>
         </div>
 

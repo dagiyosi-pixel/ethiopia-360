@@ -1,5 +1,5 @@
 /**
- * ETHIOPIA//360 — domain types.
+ * ETHIOPIA//360 , domain types.
  * These mirror the SQL schema in `supabase/schema.sql`. Public routes are slug
  * based; `id` fields are only used for relations inside the app.
  */
@@ -11,6 +11,7 @@ export type ContentType =
   | "place"
   | "event"
   | "history"
+  | "culture"
   | "architecture";
 
 export type ContentStatus = "draft" | "published" | "pending" | "hidden" | "removed";
@@ -52,6 +53,43 @@ export interface Coords {
   lng: number;
 }
 
+/**
+ * Where a record comes from. Curated/seeded material is written by the editorial
+ * data layer; community material was published by a signed-in contributor.
+ * The distinction is surfaced in the UI so community uploads are never mistaken
+ * for official editorial content (and generated artwork is never mistaken for a
+ * photograph).
+ */
+export type Provenance = "curated" | "community";
+
+/** A single geographic point the map can render. */
+export type MapMarkerKind = "region" | "city" | "place" | "story" | "photo" | "video" | "history" | "culture" | "architecture";
+
+/** Map filter chips: every marker kind, or everything at once. */
+export type MapFilter = "all" | MapMarkerKind;
+
+export interface MapMarker {
+  /** Stable id: `${kind}:${slug}`. */
+  id: string;
+  kind: MapMarkerKind;
+  slug: string;
+  title: string;
+  /** Short line shown in the map preview card. */
+  subtitle?: string;
+  lat: number;
+  lng: number;
+  /** Real in-app destination , markers never point at nothing. */
+  href: string;
+  regionSlug?: string;
+  regionName?: string;
+  category?: string;
+  provenance: Provenance;
+  /** Real asset when one exists, otherwise the generated artwork renders. */
+  image?: string | null;
+  imageAlt?: string | null;
+  artwork: Artwork;
+}
+
 export interface Region {
   slug: string;
   name: string;
@@ -64,11 +102,15 @@ export interface Region {
   description: string;
   artwork: Artwork;
   image?: string | null;
+  /** Credit line shown with the visual (author, licence, source). */
   imageSource?: string | null;
+  /** What the attached image actually depicts. Never guessed. */
   imageSubject?: string | null;
+  /** Alt text for the visual , falls back to the record name. */
+  imageAlt?: string | null;
   landscape: string;
   languages: string[];
-  /** Illustrative figures from published public sources — marked approximate. */
+  /** Illustrative figures from published public sources , marked approximate. */
   stats: {
     areaKm2?: number;
     populationApprox?: number;
@@ -80,7 +122,7 @@ export interface Region {
   /**
    * Key of the boundary feature in `public/geo/ethiopia-regions.geojson`.
    * `null` when no reliable boundary exists for the unit (e.g. regions created
-   * after the boundary dataset was published) — those render as markers only.
+   * after the boundary dataset was published) , those render as markers only.
    */
   geoKey?: string | null;
   /** Shown to the reader when the boundary is approximate or absent. */
@@ -100,6 +142,7 @@ export interface City {
   image?: string | null;
   imageSource?: string | null;
   imageSubject?: string | null;
+  imageAlt?: string | null;
   elevationM?: number;
   knownFor: string[];
   landmarks: string[];
@@ -128,13 +171,14 @@ export interface Place {
   category: "nature" | "heritage" | "urban" | "religious" | "market" | "landmark";
   regionSlug: string;
   citySlug?: string;
-  coords: Coords;
+  coords?: Coords | null;
   summary: string;
   description: string[];
   artwork: Artwork;
   image?: string | null;
   imageSource?: string | null;
   imageSubject?: string | null;
+  imageAlt?: string | null;
   contributorId: string;
   tags: string[];
   likes: number;
@@ -150,17 +194,20 @@ export interface Story {
   title: string;
   titleAm?: string;
   excerpt: string;
-  /** Paragraphs. Rendered as plain text nodes — no HTML is ever injected. */
+  /** Paragraphs. Rendered as plain text nodes , no HTML is ever injected. */
   body: string[];
   authorId: string;
   regionSlug?: string;
   citySlug?: string;
+  /** Set when the contributor provided a point; makes the story map-renderable. */
+  coords?: Coords | null;
   category: Category;
   tags: string[];
   artwork: Artwork;
   image?: string | null;
   imageSource?: string | null;
   imageSubject?: string | null;
+  imageAlt?: string | null;
   readMinutes: number;
   likes: number;
   comments: number;
@@ -180,6 +227,8 @@ export interface MediaItem {
   regionSlug?: string;
   citySlug?: string;
   placeSlug?: string;
+  /** Set when the uploader supplied a point , community media then appears on the map. */
+  coords?: Coords | null;
   category: Category;
   tags: string[];
   artwork: Artwork;
@@ -194,6 +243,10 @@ export interface MediaItem {
   saves: number;
   views: number;
   createdAt: string;
+  /** Image provenance fields for photos. */
+  imageSource?: string | null;
+  imageSubject?: string | null;
+  imageAlt?: string | null;
 }
 
 export interface Comment {
@@ -221,11 +274,14 @@ export interface HistoricalEntry {
   detail: string[];
   location: string;
   regionSlug?: string;
+  citySlug?: string;
+  authorId?: string;
   coords?: Coords;
   artwork: Artwork;
   image?: string | null;
   imageSource?: string | null;
   imageSubject?: string | null;
+  imageAlt?: string | null;
   tags: string[];
   /** Where the claim comes from; demo copy is explicitly labelled. */
   sourceNote: string;
@@ -250,10 +306,13 @@ export interface CultureTopic {
   summary: string;
   description: string[];
   regionSlug?: string;
+  citySlug?: string;
+  coords?: Coords | null;
   artwork: Artwork;
   image?: string | null;
   imageSource?: string | null;
   imageSubject?: string | null;
+  imageAlt?: string | null;
   tags: string[];
   contributorId?: string;
   sourceNote: string;
@@ -279,6 +338,7 @@ export interface ArchitectureEntry {
   image?: string | null;
   imageSource?: string | null;
   imageSubject?: string | null;
+  imageAlt?: string | null;
   artwork: Artwork;
   contributorId: string;
   tags: string[];

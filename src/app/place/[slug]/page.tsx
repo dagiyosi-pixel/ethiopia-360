@@ -1,12 +1,13 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ArrowRight, Heart, MapPin, MessageCircle, Tag } from "lucide-react";
+import { ArrowRight, ExternalLink, Heart, MapPin, MessageCircle, Navigation, Tag } from "lucide-react";
 import { PageHeader } from "@/components/ui/SectionHeading";
 import { Badge } from "@/components/ui/Badge";
 import { MediaFrame } from "@/components/visual/MediaFrame";
 import { StoryCard } from "@/components/cards/StoryCard";
 import { getPlace, getRelatedPlaces, getRegion, getCity, listStories } from "@/lib/data/queries";
 import { formatCompact } from "@/lib/utils";
+import { googleMapsDirectionsHref, googleMapsPlaceHref, markerMapHref } from "@/lib/map-links";
 
 export async function generateStaticParams() {
   const { places } = await import("@/data/places");
@@ -41,7 +42,12 @@ export default async function PlacePage({ params }: { params: Promise<{ slug: st
       <div className="mx-auto max-w-shell px-4 py-10 sm:px-8">
         <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr]">
           <div className="overflow-hidden rounded-[1.75rem] border border-white/10 bg-ink-850/80">
-            <MediaFrame src={place.image} artwork={place.artwork} alt={place.name} aspect="16/9" rounded={false} priority />
+            <MediaFrame src={place.image} artwork={place.artwork} alt={place.imageAlt ?? place.name} aspect="16/9" rounded={false} priority />
+            {place.imageSource && place.image && (
+              <p className="p-3 text-xs leading-relaxed text-ink-400">
+                {place.imageSubject ? `${place.imageSubject}. ` : ""}{place.imageSource}
+              </p>
+            )}
           </div>
           <div className="rounded-[1.75rem] border border-white/10 bg-ink-850/80 p-6">
             <div className="flex flex-wrap gap-2">
@@ -54,6 +60,11 @@ export default async function PlacePage({ params }: { params: Promise<{ slug: st
               <div className="flex items-center gap-2"><Heart className="h-4 w-4 text-ink-500" /> {formatCompact(place.likes)} likes</div>
               <div className="flex items-center gap-2"><MessageCircle className="h-4 w-4 text-ink-500" /> {formatCompact(place.comments)} comments</div>
             </dl>
+            {place.coords && <div className="mt-5 flex flex-wrap gap-2">
+              <Link href={markerMapHref("place", place.slug, "place")} className="inline-flex items-center gap-1.5 rounded-full border border-gold-500/40 bg-gold-500/10 px-3.5 py-2 text-xs text-gold-200 hover:bg-gold-500/20"><MapPin aria-hidden className="h-3.5 w-3.5" /> View on our map</Link>
+              <a href={googleMapsPlaceHref(place.coords)} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 rounded-full border border-white/15 px-3.5 py-2 text-xs text-ink-100 hover:border-gold-500/50">Google Maps <ExternalLink aria-hidden className="h-3.5 w-3.5" /></a>
+              <a href={googleMapsDirectionsHref(place.coords)} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 rounded-full border border-white/15 px-3.5 py-2 text-xs text-ink-100 hover:border-gold-500/50">Directions <Navigation aria-hidden className="h-3.5 w-3.5" /></a>
+            </div>}
             <div className="mt-6 flex flex-wrap gap-2">
               {place.tags.map((tag) => (
                 <span key={tag} className="rounded-full border border-white/10 bg-white/[0.02] px-2.5 py-1 text-[10px] uppercase tracking-wider2 text-ink-300">{tag}</span>

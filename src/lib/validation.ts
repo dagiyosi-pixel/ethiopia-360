@@ -2,7 +2,7 @@ import { z } from "zod";
 import { CATEGORIES } from "@/types";
 
 /* ------------------------------------------------------------------------- */
-/* Upload constraints — enforced client side for UX and server side for safety */
+/* Upload constraints , enforced client side for UX and server side for safety */
 /* ------------------------------------------------------------------------- */
 
 export const IMAGE_MIME = [
@@ -100,7 +100,7 @@ export const reportSchema = z.object({
 });
 
 export const uploadSchema = z.object({
-  type: z.enum(["photo", "video", "story", "place", "event", "history", "architecture"]),
+  type: z.enum(["photo", "video", "story", "place", "event", "history", "culture", "architecture"]),
   title: z.string().min(3, "Give this a title.").max(140),
   description: z.string().max(4000).default(""),
   regionSlug: z.string().max(60).default(""),

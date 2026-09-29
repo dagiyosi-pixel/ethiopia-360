@@ -27,7 +27,7 @@ export function CityCard({
       <MediaFrame
         src={city.image}
         artwork={city.artwork}
-        alt={`${city.name} — generated city artwork`}
+        alt={`${city.name} , generated city artwork`}
         aspect="1/1"
         rounded
         sizes="140px"

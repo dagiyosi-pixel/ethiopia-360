@@ -1,12 +1,13 @@
 import type { Place } from "@/types";
+import { applyCuratedVisuals } from "@/data/images";
 
 /**
- * DEMO SEED DATA — places.
+ * DEMO SEED DATA , places.
  * Coordinates are approximate visitor-entrance points, good enough for map
  * pins. Descriptive copy is illustrative development copy, not a verified
  * travel guide. Append above SEED_PLACES_END.
  */
-export const places: Place[] = [
+const placeSeed: Place[] = [
   {
     slug: "lalibela-rock-churches",
     name: "Lalibela Rock-Hewn Churches",
@@ -22,10 +23,6 @@ export const places: Place[] = [
       "The complex sits in the middle of an active town and daily worship continues in most of the churches. Go early if you want the courtyards before the tour groups arrive.",
     ],
     artwork: { palette: "rift", seed: 401, motif: "arch" },
-    image:
-      "https://images.unsplash.com/photo-1521295121783-8a321d551ad2?auto=format&fit=crop&w=1200&q=80",
-    imageSource: "Unsplash — Lalibela rock-hewn churches, public travel photography.",
-    imageSubject: "Lalibela rock-hewn churches",
     contributorId: "u-dawit",
     tags: ["unesco", "rock-hewn", "pilgrimage", "highlands"],
     likes: 2841,
@@ -46,13 +43,9 @@ export const places: Place[] = [
       "Papyrus-boat country: island and peninsula monasteries on Ethiopia's largest lake, several holding painted manuscript tradition.",
     description: [
       "Lake Tana spreads across the highland basin, dotted with islands and peninsulas that have hosted monastic communities for centuries. Access is by tankwa, the local papyrus boat, or by motorboat from Bahir Dar.",
-      "Several monasteries hold wall paintings and manuscript collections. Photography rules vary by site and season — ask before raising a camera.",
+      "Several monasteries hold wall paintings and manuscript collections. Photography rules vary by site and season , ask before raising a camera.",
     ],
     artwork: { palette: "nile", seed: 402, motif: "contour" },
-    image:
-      "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1200&q=80",
-    imageSource: "Unsplash — Lake Tana shoreline and highland water landscape.",
-    imageSubject: "Lake Tana",
     contributorId: "u-selam",
     tags: ["lake", "monastery", "manuscripts", "boats"],
     likes: 1920,
@@ -72,13 +65,9 @@ export const places: Place[] = [
       "Escarpment country of sheer basalt walls and high plateau, home to gelada troops and the walia ibex.",
     description: [
       "The Simien massif is a wall of eroded basalt rising above the northern plateau, with camp sites set on the rim above enormous drops. Ras Dashen, the country's highest point, sits in the same range.",
-      "Altitude is serious here — most trekking routes stay above 3,000 metres. Acclimatise first and carry layers; the swing between midday sun and night is severe.",
+      "Altitude is serious here , most trekking routes stay above 3,000 metres. Acclimatise first and carry layers; the swing between midday sun and night is severe.",
     ],
     artwork: { palette: "basalt", seed: 403, motif: "contour" },
-    image:
-      "https://images.unsplash.com/photo-1472396961693-142e6e269027?auto=format&fit=crop&w=1200&q=80",
-    imageSource: "Unsplash — highland escarpment and mountain landscape in East Africa.",
-    imageSubject: "Simien Mountains",
     contributorId: "u-abebe",
     tags: ["trekking", "gelada", "escarpment", "national-park"],
     likes: 3120,
@@ -102,9 +91,8 @@ export const places: Place[] = [
       "The interiors are what most visitors remember: painted walls, stacked baskets, and coffee roasted and served in the same room.",
     ],
     artwork: { palette: "harar", seed: 404, motif: "arch" },
-    image:
-      "https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?auto=format&fit=crop&w=1200&q=80",
-    imageSource: "Unsplash — Old walled-city street and architectural detail.",
+    image: null,
+    imageSource: "Neutral generated artwork , pending a verified Harar Jugol photograph.",
     imageSubject: "Harar Jugol",
     contributorId: "u-yusuf",
     tags: ["walled-city", "unesco", "courtyards", "coffee"],
@@ -129,7 +117,7 @@ export const places: Place[] = [
     ],
     artwork: { palette: "highland", seed: 405, motif: "contour" },
     image: null,
-    imageSource: "Neutral generated artwork — pending a verified Bale Mountains photograph.",
+    imageSource: "Neutral generated artwork , pending a verified Bale Mountains photograph.",
     imageSubject: "Bale Mountains",
     contributorId: "u-abebe",
     tags: ["afro-alpine", "endemic", "wolves", "plateau"],
@@ -150,11 +138,11 @@ export const places: Place[] = [
       "Salt flats, sulphur terraces and active lava lakes in a rift basin that drops below sea level.",
     description: [
       "The Danakil is a rift basin of salt pans, hot springs and volcanic vents. Dallol's sulphur formations sit on a layer of salt that has been cut into slabs for generations and moved out by camel caravan.",
-      "This is genuinely extreme heat — trips run at night and in the cooler months for good reason. Travel with an organised convoy and local guides rather than independently.",
+      "This is genuinely extreme heat , trips run at night and in the cooler months for good reason. Travel with an organised convoy and local guides rather than independently.",
     ],
     artwork: { palette: "danakil", seed: 406, motif: "terrace" },
     image: null,
-    imageSource: "Neutral generated artwork — pending a verified Danakil photograph.",
+    imageSource: "Neutral generated artwork , pending a verified Danakil photograph.",
     imageSubject: "Danakil Depression",
     contributorId: "u-meron",
     tags: ["desert", "volcanic", "salt", "extreme"],
@@ -173,7 +161,7 @@ export const places: Place[] = [
     citySlug: "addis-ababa",
     coords: { lat: 9.0345, lng: 38.7409 },
     summary:
-      "One of the largest open-air trading districts in Africa — kilometres of stalls grouped by what they sell.",
+      "One of the largest open-air trading districts in Africa , kilometres of stalls grouped by what they sell.",
     description: [
       "Merkato is not a single market but a district of specialist quarters: coffee, spices, metalwork, recycled electronics, textiles. Each trade occupies its own street or block.",
       "Go with a purpose and a local guide. Navigation is genuinely difficult, and the fastest way to learn the layout is to follow one commodity from wholesale to retail.",
@@ -256,6 +244,15 @@ export const places: Place[] = [
     createdAt: "2024-03-19",
   },
 ];
+
+/**
+ * Verified imagery is attached from the central registry in `src/data/images.ts`.
+ * The registry only contains photographs that genuinely depict the subject; the
+ * Harar entry, for example, is a gate in the Jugol wall , not a generic street
+ * photograph from elsewhere. Places without a verified photograph keep an
+ * explicitly labelled neutral generated visual.
+ */
+export const places: Place[] = applyCuratedVisuals(placeSeed, (place) => place.name);
 
 export const placeBySlug = new Map(places.map((p) => [p.slug, p]));
 

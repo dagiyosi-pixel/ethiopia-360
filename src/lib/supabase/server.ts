@@ -7,7 +7,7 @@ import { SUPABASE_ANON_KEY, SUPABASE_URL, isSupabaseConfigured } from "@/lib/env
 
 /**
  * Server client bound to the request cookies. Returns null in demo mode.
- * The service-role key is never used here — server-side writes run as the
+ * The service-role key is never used here , server-side writes run as the
  * authenticated user so Row Level Security is always enforced.
  */
 export async function getSupabaseServerClient(): Promise<SupabaseClient | null> {

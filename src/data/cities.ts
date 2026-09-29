@@ -1,11 +1,12 @@
 import type { City } from "@/types";
+import { applyCuratedVisuals } from "@/data/images";
 
 /**
- * DEMO SEED DATA — cities. See `src/data/regions.ts` for the disclaimer on
+ * DEMO SEED DATA , cities. See `src/data/regions.ts` for the disclaimer on
  * provenance: coordinates are approximate city centres, figures are indicative.
  * Append new cities above the SEED_CITIES_END marker.
  */
-export const cities: City[] = [
+const citySeed: City[] = [
   {
     slug: "addis-ababa",
     name: "Addis Ababa",
@@ -16,10 +17,10 @@ export const cities: City[] = [
     summary:
       "The capital: a highland city of museums, markets, jazz rooms and a light-rail spine, ringed by eucalyptus-covered ridge.",
     description:
-      "Addis Ababa reads as several cities stacked together — imperial-era palaces and squares, the immense Merkato trading district, a diplomatic quarter of embassies, and fast-growing satellite suburbs climbing the Entoto slopes.",
+      "Addis Ababa reads as several cities stacked together , imperial-era palaces and squares, the immense Merkato trading district, a diplomatic quarter of embassies, and fast-growing satellite suburbs climbing the Entoto slopes.",
     artwork: { palette: "entoto", seed: 12, motif: "tower" },
     image: null,
-    imageSource: "Neutral generated artwork — pending a verified Addis Ababa photograph.",
+    imageSource: "Neutral generated artwork , pending a verified Addis Ababa photograph.",
     imageSubject: "Addis Ababa",
     elevationM: 2355,
     knownFor: ["Museums", "Coffee ceremony", "Jazz", "Merkato", "Light rail"],
@@ -45,7 +46,7 @@ export const cities: City[] = [
       "Gondar was founded as a permanent royal capital and retains a remarkable concentration of castle and church architecture within a short walk of the centre.",
     artwork: { palette: "gold", seed: 21, motif: "arch" },
     image: null,
-    imageSource: "Neutral generated artwork — pending a verified Gondar photograph.",
+    imageSource: "Neutral generated artwork , pending a verified Gondar photograph.",
     imageSubject: "Gondar and Fasil Ghebbi",
     elevationM: 2133,
     knownFor: ["Castles", "Church murals", "Imperial history", "Timkat celebrations"],
@@ -69,7 +70,7 @@ export const cities: City[] = [
       "Bahir Dar's avenues are unusually wide and green, laid out along the southern shore of Lake Tana. Boats from the lakefront reach peninsula and island monasteries, and the Blue Nile leaves the lake about 30 km south.",
     artwork: { palette: "nile", seed: 33, motif: "contour" },
     image: null,
-    imageSource: "Neutral generated artwork — pending a verified Bahir Dar / Lake Tana photograph.",
+    imageSource: "Neutral generated artwork , pending a verified Bahir Dar / Lake Tana photograph.",
     imageSubject: "Bahir Dar and Lake Tana",
     elevationM: 1800,
     knownFor: ["Lake Tana", "Monasteries", "Blue Nile Falls", "Wide avenues"],
@@ -195,7 +196,7 @@ export const cities: City[] = [
     coords: { lat: 12.0317, lng: 39.0413 },
     zoom: 14,
     summary:
-      "Highland town of churches excavated downward into living rock — a single carved complex rather than separate built structures.",
+      "Highland town of churches excavated downward into living rock , a single carved complex rather than separate built structures.",
     description:
       "Lalibela's churches were cut down into volcanic tuff, so the visitor descends into them rather than entering upward. The complex remains an active pilgrimage destination and a UNESCO World Heritage property.",
     artwork: { palette: "rift", seed: 46, motif: "arch" },
@@ -258,7 +259,7 @@ export const cities: City[] = [
     coords: { lat: 6.0333, lng: 37.55 },
     zoom: 13,
     summary:
-      "'Forty springs' — a lake-view town on the ridge between Lakes Abaya and Chamo, gateway to Konso and the Omo.",
+      "'Forty springs' , a lake-view town on the ridge between Lakes Abaya and Chamo, gateway to Konso and the Omo.",
     description:
       "Arba Minch sits on a narrow ridge dividing two Rift Valley lakes, with the Nechisar plain below. It is the practical base for trips toward the Konso terraces and the lower Omo.",
     artwork: { palette: "nile", seed: 79, motif: "contour" },
@@ -372,6 +373,13 @@ export const cities: City[] = [
     landmarks: ["Bonga forest trails", "Coffee gene bank", "Kafa cultural sites"],
   },
 ];
+
+/**
+ * Verified imagery is attached from the central registry in
+ * `src/data/images.ts`. Cities without a verified photograph keep an explicitly
+ * labelled neutral generated visual rather than an unrelated stock photo.
+ */
+export const cities: City[] = applyCuratedVisuals(citySeed, (city) => city.name);
 
 export const cityBySlug = new Map(cities.map((c) => [c.slug, c]));
 

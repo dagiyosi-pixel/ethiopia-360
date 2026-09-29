@@ -20,26 +20,8 @@ function readString(form: FormData, key: string): string {
   return typeof value === "string" ? value : "";
 }
 
-async function createProfileRow(
-  userId: string,
-  email: string,
-  username: string,
-  displayName: string,
-): Promise<void> {
-  const supabase = await getSupabaseServerClient();
-  if (!supabase) return;
-  const { error } = await supabase.from("profiles").insert({
-    id: userId,
-    username,
-    display_name: displayName,
-    bio: "",
-    location: "",
-    is_public: true,
-    role: "user",
-  });
-  if (error) {
-    console.warn(`[auth] profile insert failed for ${email}: ${error.message}`);
-  }
+function isSafeNextPath(value: string): boolean {
+  return value.startsWith("/") && !value.startsWith("//") && !value.includes("\\") && !/[\r\n]/.test(value);
 }
 
 export async function signUpAction(
@@ -81,11 +63,7 @@ export async function signUpAction(
   });
 
   if (error) {
-    return { error: error.message };
-  }
-
-  if (data.user) {
-    await createProfileRow(data.user.id, parsed.data.email, parsed.data.username, parsed.data.displayName);
+    return { error: "We could not create the account. Check your details or try again." };
   }
 
   if (!data.session) {
@@ -126,10 +104,10 @@ export async function signInAction(
     password: parsed.data.password,
   });
 
-  if (error) return { error: error.message };
+  if (error) return { error: "Email or password was not accepted." };
 
   const next = readString(form, "next");
-  redirect(next && next.startsWith("/") ? next : "/explore");
+  redirect(isSafeNextPath(next) ? next : "/explore");
 }
 
 export async function signInWithProviderAction(form: FormData): Promise<void> {
@@ -162,7 +140,7 @@ export async function signOutAction(): Promise<void> {
 /**
  * Local demo session. Only available when Supabase is not configured and we are
  * not in production. It carries a signed, httpOnly cookie identifying a local
- * demo account — it grants NO database access, and every write action still
+ * demo account , it grants NO database access, and every write action still
  * refuses to persist anything.
  */
 export async function startDemoSessionAction(form: FormData): Promise<void> {
@@ -173,7 +151,7 @@ export async function startDemoSessionAction(form: FormData): Promise<void> {
 
   await startDemoSession(makeDemoUser(username, displayName));
   const next = readString(form, "next");
-  redirect(next && next.startsWith("/") ? next : "/explore");
+  redirect(isSafeNextPath(next) ? next : "/explore");
 }
 
 export async function endDemoSessionAction(): Promise<ActionResult> {

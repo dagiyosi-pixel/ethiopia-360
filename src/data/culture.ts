@@ -1,7 +1,7 @@
 import type { CultureTopic } from "@/types";
 
 /**
- * DEMO SEED DATA — culture topics.
+ * DEMO SEED DATA , culture topics.
  * Illustrative development copy. Each topic carries a `sourceNote`; anything
  * involving a specific claim, name or attribution must be sourced by an editor
  * before it is presented as fact. Append above SEED_CULTURE_END.
@@ -20,10 +20,10 @@ export const cultureTopics: CultureTopic[] = [
     ],
     artwork: { palette: "gold", seed: 801, motif: "weave" },
     image: null,
-    imageSource: "Neutral generated artwork — pending a verified script or manuscript photograph.",
+    imageSource: "Neutral generated artwork , pending a verified script or manuscript photograph.",
     imageSubject: "Ethiopian scripts and language heritage",
     tags: ["language", "script", "geez", "amharic"],
-    sourceNote: "PLACEHOLDER — general framing. Verify any counts before publishing.",
+    sourceNote: "PLACEHOLDER , general framing. Verify any counts before publishing.",
   },
   {
     slug: "injera-and-the-shared-plate",
@@ -38,10 +38,10 @@ export const cultureTopics: CultureTopic[] = [
     ],
     artwork: { palette: "rift", seed: 802, motif: "weave" },
     image: null,
-    imageSource: "Neutral generated artwork — pending a verified injera or shared-meal photograph.",
+    imageSource: "Neutral generated artwork , pending a verified injera or shared-meal photograph.",
     imageSubject: "Injera and communal dining",
     tags: ["food", "teff", "fermentation", "shared-meal"],
-    sourceNote: "PLACEHOLDER — verify regional specifics with local contributors.",
+    sourceNote: "PLACEHOLDER , verify regional specifics with local contributors.",
   },
   {
     slug: "coffee-ceremony",
@@ -49,17 +49,17 @@ export const cultureTopics: CultureTopic[] = [
     name: "The coffee ceremony",
     nameAm: "የቡና ሥርዓት",
     summary:
-      "Green beans roasted over coals, ground by hand and brewed three times in a clay pot — a social occasion, not a quick drink.",
+      "Green beans roasted over coals, ground by hand and brewed three times in a clay pot , a social occasion, not a quick drink.",
     description: [
       "The ceremony is a sequence: incense, roasting, grinding, brewing, then three rounds served in small cups. Each round has its own name and its own strength.",
       "Guests are expected to stay for at least part of it. Refusing outright is unusual; the point is the time spent rather than the caffeine.",
     ],
     artwork: { palette: "highland", seed: 803, motif: "coffee" },
     image: null,
-    imageSource: "Neutral generated artwork — pending a verified coffee-ceremony photograph.",
+    imageSource: "Neutral generated artwork , pending a verified coffee-ceremony photograph.",
     imageSubject: "Ethiopian coffee ceremony",
     tags: ["coffee", "ceremony", "hospitality", "jebena"],
-    sourceNote: "PLACEHOLDER — general description.",
+    sourceNote: "PLACEHOLDER , general description.",
   },
   {
     slug: "music-and-instruments",
@@ -69,12 +69,12 @@ export const cultureTopics: CultureTopic[] = [
     summary:
       "The krar, masenqo and washint belong to the highland tradition, and scale systems differ from place to place.",
     description: [
-      "Highland music is built around a small set of instruments — the krar (lyre), masenqo (one-stringed fiddle) and washint (bamboo flute) — often with a vocalist using a distinctly nasal delivery.",
+      "Highland music is built around a small set of instruments , the krar (lyre), masenqo (one-stringed fiddle) and washint (bamboo flute) , often with a vocalist using a distinctly nasal delivery.",
       "Traditional tuning and scale systems vary between regions and are not interchangeable with Western scales, which is why transcriptions often lose something.",
     ],
     artwork: { palette: "gold", seed: 804, motif: "weave" },
     tags: ["music", "instruments", "krar", "washint"],
-    sourceNote: "PLACEHOLDER — general description.",
+    sourceNote: "PLACEHOLDER , general description.",
   },
   {
     slug: "traditional-clothing",
@@ -89,7 +89,7 @@ export const cultureTopics: CultureTopic[] = [
     ],
     artwork: { palette: "gold", seed: 805, motif: "weave" },
     tags: ["clothing", "textiles", "weaving", "cotton"],
-    sourceNote: "PLACEHOLDER — verify ceremonial specifics.",
+    sourceNote: "PLACEHOLDER , verify ceremonial specifics.",
   },
   {
     slug: "festival-seasons",
@@ -104,7 +104,7 @@ export const cultureTopics: CultureTopic[] = [
     ],
     artwork: { palette: "entoto", seed: 806, motif: "arch" },
     tags: ["festival", "timkat", "meskel", "calendar"],
-    sourceNote: "PLACEHOLDER — dates vary by calendar; verify before publishing a schedule.",
+    sourceNote: "PLACEHOLDER , dates vary by calendar; verify before publishing a schedule.",
   },
   {
     slug: "hospitality-and-everyday-customs",
@@ -115,11 +115,11 @@ export const cultureTopics: CultureTopic[] = [
       "Sharing food, gifting coffee and receiving guests are social obligations rather than optional courtesies.",
     description: [
       "Offering food and coffee to a visitor is a social obligation rather than a favour, and accepting at least a token amount is the polite move.",
-      "Traditions differ sharply between highland, lowland and pastoral communities — from coffee rituals to cattle-naming and age-set systems — so 'local custom' is always a specific, located thing.",
+      "Traditions differ sharply between highland, lowland and pastoral communities , from coffee rituals to cattle-naming and age-set systems , so 'local custom' is always a specific, located thing.",
     ],
     artwork: { palette: "harar", seed: 807, motif: "weave" },
     tags: ["traditions", "hospitality", "custom", "social"],
-    sourceNote: "PLACEHOLDER — general description.",
+    sourceNote: "PLACEHOLDER , general description.",
   },
   {
     slug: "contemporary-art",
@@ -129,12 +129,12 @@ export const cultureTopics: CultureTopic[] = [
     summary:
       "A long tradition of manuscript illumination informs a contemporary scene of painting, photography and installation.",
     description: [
-      "Illuminated manuscripts established a formal visual vocabulary — stylised figures, flat colour fields, patterned borders — that contemporary artists frequently quote and rework.",
+      "Illuminated manuscripts established a formal visual vocabulary , stylised figures, flat colour fields, patterned borders , that contemporary artists frequently quote and rework.",
       "The contemporary scene is concentrated in the capital, with growing exhibition spaces and a strong photographic and documentary practice.",
     ],
     artwork: { palette: "rift", seed: 808, motif: "weave" },
     tags: ["art", "manuscript", "contemporary", "painting"],
-    sourceNote: "PLACEHOLDER — verify named artists before publishing.",
+    sourceNote: "PLACEHOLDER , verify named artists before publishing.",
   },
   {
     slug: "oral-and-written-literature",
@@ -144,12 +144,12 @@ export const cultureTopics: CultureTopic[] = [
     summary:
       "Poetry is a competitive public form in several traditions, alongside a substantial written literature in multiple languages.",
     description: [
-      "In several parts of the country poetry is a public, competitive activity — performed, judged and remembered — and it carries political as well as artistic weight.",
+      "In several parts of the country poetry is a public, competitive activity , performed, judged and remembered , and it carries political as well as artistic weight.",
       "Written literature spans Ge'ez religious texts, early twentieth-century Amharic fiction, and contemporary writing in Amharic, Oromo and other languages, much of it now circulating through online publishing.",
     ],
     artwork: { palette: "basalt", seed: 809, motif: "contour" },
     tags: ["literature", "poetry", "oral-tradition", "publishing"],
-    sourceNote: "PLACEHOLDER — verify named works before publishing.",
+    sourceNote: "PLACEHOLDER , verify named works before publishing.",
   },
 ];
 

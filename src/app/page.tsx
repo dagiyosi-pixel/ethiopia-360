@@ -33,7 +33,7 @@ export default function HomePage() {
               <span className="text-gold-400">Thousands of stories.</span>
             </h1>
             <p className="mt-5 max-w-xl text-base leading-relaxed text-ink-200 sm:text-lg">
-              Discover the places, people, rituals and architecture that shape Ethiopia — from the plateaus of the north to the forests of the south, captured by residents and visitors alike.
+              Discover the places, people, rituals and architecture that shape Ethiopia , from the plateaus of the north to the forests of the south, captured by residents and visitors alike.
             </p>
 
             <div className="mt-7 flex flex-wrap gap-3">

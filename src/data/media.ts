@@ -1,7 +1,7 @@
 import type { MediaItem } from "@/types";
 
 /**
- * DEMO SEED DATA — photos and videos.
+ * DEMO SEED DATA , photos and videos.
  * `src`/`poster` are null for seed content, so the UI renders the procedural
  * artwork component instead of pretending a photo exists. Once real files are
  * uploaded to Supabase Storage, `media.asset_url` fills these fields and the

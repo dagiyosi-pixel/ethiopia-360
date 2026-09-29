@@ -1,4 +1,5 @@
 import type { Region } from "@/types";
+import { applyCuratedVisuals } from "@/data/images";
 
 /**
  * DEMO SEED DATA.
@@ -6,12 +7,12 @@ import type { Region } from "@/types";
  * Descriptive copy below is clearly-labelled illustrative material for
  * development. Figures are approximate, drawn from widely published public
  * references and are NOT presented as authoritative. Boundary geometry is
- * derived from geoBoundaries (ETH ADM1, CC BY 4.0) — see `scripts/build-geo.mjs`.
+ * derived from geoBoundaries (ETH ADM1, CC BY 4.0) , see `scripts/build-geo.mjs`.
  *
  * This file mirrors the shape of the `regions` table. `lib/data/queries.ts`
  * prefers Supabase when configured and falls back to this seed when it is not.
  */
-export const regions: Region[] = [
+const regionSeed: Region[] = [
   {
     slug: "addis-ababa",
     name: "Addis Ababa",
@@ -22,12 +23,12 @@ export const regions: Region[] = [
     zoom: 11,
     landscape: "Highland plateau · ~2,300 m",
     summary:
-      "The federal capital and the country's densest collision of old and new — diplomatic quarter, Merkato, jazz clubs and mountain-edge viewpoints.",
+      "The federal capital and the country's densest collision of old and new , diplomatic quarter, Merkato, jazz clubs and mountain-edge viewpoints.",
     description:
       "Addis Ababa sits in a bowl of highland ridges at roughly 2,300 metres. It is both the political centre of the federation and the largest single gathering of Ethiopia's many communities, which makes it the most useful place to start understanding the rest of the country.",
     artwork: { palette: "entoto", seed: 11, motif: "tower" },
     image: null,
-    imageSource: "Neutral generated artwork — pending a verified Addis Ababa photograph.",
+    imageSource: "Neutral generated artwork , pending a verified Addis Ababa photograph.",
     imageSubject: "Addis Ababa",
     languages: ["Amharic", "Oromo", "English", "many others"],
     stats: { areaKm2: 527, populationApprox: 5_200_000, elevationM: 2355 },
@@ -56,7 +57,7 @@ export const regions: Region[] = [
       "Tigray's northern geometry is defined by steep sandstone escarpments and old trade corridors that once linked the Red Sea coast to the highland interior. Its towns carry an unusually deep record of Aksumite, manuscript and monastic tradition.",
     artwork: { palette: "basalt", seed: 23, motif: "tower" },
     image: null,
-    imageSource: "Neutral generated artwork — pending a verified Tigray photograph.",
+    imageSource: "Neutral generated artwork , pending a verified Tigray photograph.",
     imageSubject: "Tigray",
     languages: ["Tigrinya", "Amharic"],
     stats: { areaKm2: 53_000, populationApprox: 5_700_000 },
@@ -82,10 +83,10 @@ export const regions: Region[] = [
     summary:
       "Lake Tana, the Simien escarpments and the historic northern circuit from Gondar to Lalibela to the Blue Nile falls.",
     description:
-      "Amhara holds a large share of the country's best-known historic sites alongside highland farming landscapes, island monasteries and the source of the Blue Nile. Altitude dominates daily life — the plateau sits mostly between 1,800 and 3,000 metres.",
+      "Amhara holds a large share of the country's best-known historic sites alongside highland farming landscapes, island monasteries and the source of the Blue Nile. Altitude dominates daily life , the plateau sits mostly between 1,800 and 3,000 metres.",
     artwork: { palette: "nile", seed: 7, motif: "contour" },
     image: null,
-    imageSource: "Neutral generated artwork — pending a verified Amhara photograph.",
+    imageSource: "Neutral generated artwork , pending a verified Amhara photograph.",
     imageSubject: "Amhara region",
     languages: ["Amharic", "Agaw", "Qimant"],
     stats: { areaKm2: 154_000, populationApprox: 22_000_000 },
@@ -187,9 +188,9 @@ export const regions: Region[] = [
     zoom: 7,
     landscape: "Rift Valley lakes, escarpments, enset highlands",
     summary:
-      "A mosaic of dozens of communities, lake chains and terraced enset highlands — the most linguistically dense part of the federation.",
+      "A mosaic of dozens of communities, lake chains and terraced enset highlands , the most linguistically dense part of the federation.",
     description:
-      "The southern region contains an extraordinary concentration of distinct languages and food cultures, organised around enset, coffee and Rift Valley lake fisheries. Several new regional states have been created from this area since 2019 — see the Sidama, South Ethiopia and South West entries.",
+      "The southern region contains an extraordinary concentration of distinct languages and food cultures, organised around enset, coffee and Rift Valley lake fisheries. Several new regional states have been created from this area since 2019 , see the Sidama, South Ethiopia and South West entries.",
     artwork: { palette: "highland", seed: 59, motif: "weave" },
     languages: ["Sidaama", "Wolaytta", "Gamo", "Gurage", "many others"],
     stats: { areaKm2: 105_887, populationApprox: 12_000_000 },
@@ -230,7 +231,7 @@ export const regions: Region[] = [
     cities: ["hawassa"],
     geoKey: null,
     geoNote:
-      "Created in 2019/2020, after the boundary dataset used here was published — shown as a marker.",
+      "Created in 2019/2020, after the boundary dataset used here was published , shown as a marker.",
   },
   {
     slug: "south-ethiopia",
@@ -257,7 +258,7 @@ export const regions: Region[] = [
     cities: ["arba-minch"],
     geoKey: null,
     geoNote:
-      "Reorganised in 2023, after the boundary dataset used here was published — shown as a marker.",
+      "Reorganised in 2023, after the boundary dataset used here was published , shown as a marker.",
   },
   {
     slug: "southwest-ethiopia",
@@ -269,7 +270,7 @@ export const regions: Region[] = [
     zoom: 7,
     landscape: "Montane rainforest, tea and coffee zones",
     summary:
-      "Humid montane forest — the country's coffee heartland and one of its richest wild coffee gene pools.",
+      "Humid montane forest , the country's coffee heartland and one of its richest wild coffee gene pools.",
     description:
       "South West Ethiopia Peoples' Region was formed in 2021. High rainfall supports dense montane forest, wild Coffea arabica populations, spice gardens and honey production.",
     artwork: { palette: "highland", seed: 71, motif: "coffee" },
@@ -284,7 +285,7 @@ export const regions: Region[] = [
     cities: ["bonga"],
     geoKey: null,
     geoNote:
-      "Formed in 2021, after the boundary dataset used here was published — shown as a marker.",
+      "Formed in 2021, after the boundary dataset used here was published , shown as a marker.",
   },
 
   {
@@ -297,7 +298,7 @@ export const regions: Region[] = [
     zoom: 11,
     landscape: "Eastern highland ridge, walled city",
     summary:
-      "A small, dense regional state around the walled city of Harar — dozens of mosques inside a single fortification, and a distinctive interior design tradition.",
+      "A small, dense regional state around the walled city of Harar , dozens of mosques inside a single fortification, and a distinctive interior design tradition.",
     description:
       "Harari covers the city of Harar and its surroundings. The old walled town (Jugol) is compact but layered: narrow lanes, gated courtyards, a long-standing night-time hyena feeding tradition and its own language, Harari.",
     artwork: { palette: "harar", seed: 53, motif: "arch" },
@@ -323,7 +324,7 @@ export const regions: Region[] = [
     zoom: 10,
     landscape: "Rift-edge plain below the Harar escarpment",
     summary:
-      "The historic rail town on the plains below Harar — caravan, railway and industrial crossroads between highland and coast.",
+      "The historic rail town on the plains below Harar , caravan, railway and industrial crossroads between highland and coast.",
     description:
       "Dire Dawa grew around the Addis Ababa–Djibouti railway in the early 20th century, on the hot plain below the Harar escarpment. Its grid of wide avenues and industrial yards reflects that rail-era planning.",
     artwork: { palette: "gold", seed: 83, motif: "tower" },
@@ -349,7 +350,7 @@ export const regions: Region[] = [
     zoom: 8,
     landscape: "Lowland riverine forest, wetlands, Baro floodplain",
     summary:
-      "Wet, low-lying river country along the Baro and Akobo — fisheries, wildlife corridors and western border trade.",
+      "Wet, low-lying river country along the Baro and Akobo , fisheries, wildlife corridors and western border trade.",
     description:
       "Gambela lies low and wet along rivers draining toward the White Nile. Seasonal flooding, grassland and gallery forest shape settlement, grazing and the region's cattle-keeping cultures.",
     artwork: { palette: "nile", seed: 89, motif: "contour" },
@@ -374,7 +375,7 @@ export const regions: Region[] = [
     zoom: 7,
     landscape: "Blue Nile gorge, low wooded hills, river valleys",
     summary:
-      "The western frontier along the Blue Nile — river gorges, gold and sesame country, and the road toward Sudan.",
+      "The western frontier along the Blue Nile , river gorges, gold and sesame country, and the road toward Sudan.",
     description:
       "Benishangul-Gumuz occupies the lowland west of the Blue Nile gorge. Settlement patterns, river crossings and trade routes are closely tied to the Nile corridor and the western border.",
     artwork: { palette: "rift", seed: 97, motif: "contour" },
@@ -391,6 +392,8 @@ export const regions: Region[] = [
     geoKey: "Beneshangul Gumu",
   },
 ];
+
+export const regions: Region[] = applyCuratedVisuals(regionSeed, (region) => region.name);
 
 export const regionBySlug = new Map(regions.map((r) => [r.slug, r]));
 

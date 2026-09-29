@@ -31,12 +31,12 @@ export function MediaCard({
 
   return (
     <Link
-      href={`/gallery#${item.slug}`}
+      href={`/gallery/${item.slug}`}
       className={cn(
         "group relative block overflow-hidden rounded-xl2 border border-white/[0.08] bg-ink-850/70 transition-colors duration-300 hover:border-white/20",
         className,
       )}
-      aria-label={`${item.title} — ${item.type}`}
+      aria-label={`${item.title} , ${item.type}`}
     >
       <MediaFrame
         src={item.src}

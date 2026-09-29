@@ -8,7 +8,7 @@ import { cn, formatCompact, formatDate } from "@/lib/utils";
 import type { Contributor } from "@/types";
 
 /**
- * Story card — typography-forward rather than image-forward: the headline does
+ * Story card , typography-forward rather than image-forward: the headline does
  * the work, and the visual is used as a band or a small tile depending on the
  * variant. This is what keeps story listings from looking like photo grids.
  */

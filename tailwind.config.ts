@@ -25,9 +25,12 @@ const config: Config = {
           100: "#cbd4e4",
         },
         gold: {
+          200: "#fbeecd",
+          300: "#f6dfa4",
           400: "#f0cc73",
           500: "#e2b354",
           600: "#c8952f",
+          50: "rgba(226,179,84,0.12)",
         },
         rift: {
           400: "#e0703f",
@@ -35,6 +38,7 @@ const config: Config = {
           600: "#a03f1d",
         },
         highland: {
+          300: "#6bd3ad",
           400: "#3fb98c",
           500: "#1f8a6a",
           600: "#14654f",
@@ -56,6 +60,15 @@ const config: Config = {
         display: ["Fraunces", "Noto Serif Ethiopic", "Georgia", "serif"],
         ethiopic: ["Noto Sans Ethiopic", "Noto Serif Ethiopic", "Inter", "sans-serif"],
         mono: ["ui-monospace", "SFMono-Regular", "Menlo", "monospace"],
+      },
+      /**
+       * Two control heights used by the shell (header bar, large buttons) that are
+       * not part of Tailwind's default spacing scale. Declared here rather than
+       * dropped into components as magic numbers.
+       */
+      spacing: {
+        13: "3.25rem",
+        18: "4.5rem",
       },
       maxWidth: {
         shell: "82rem",

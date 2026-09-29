@@ -8,7 +8,7 @@ import { cn, hashString } from "@/lib/utils";
  * grey boxes, every item gets a generated composition derived from its own
  * seed: topographic contours, terraces, stelae, weave or arch geometry.
  * The result is stable (same seed => same image), cheap (inline SVG, no network
- * requests) and honest — none of it claims to be a photograph.
+ * requests) and honest , none of it claims to be a photograph.
  *
  * Once a real asset URL exists, `MediaFrame` renders that instead.
  */
@@ -38,7 +38,7 @@ export function GeneratedArtwork({ artwork, className, scrim = false, title }: A
   const id = `art${h.toString(36)}`;
   const motif = artwork.motif ?? "contour";
 
-  /** Deterministic pseudo-random — no Math.random anywhere. */
+  /** Deterministic pseudo-random , no Math.random anywhere. */
   const rnd = (index: number, mod: number) =>
     (((h >> (index % 12)) ^ (index * 2654435761)) >>> 0) % mod;
 
@@ -72,7 +72,7 @@ export function GeneratedArtwork({ artwork, className, scrim = false, title }: A
       preserveAspectRatio="xMidYMid slice"
       className={cn("h-full w-full", className)}
       role="img"
-      aria-label={title ? `${title} — generated placeholder artwork` : "Generated placeholder artwork"}
+      aria-label={title ? `${title} , generated placeholder artwork` : "Generated placeholder artwork"}
     >
       <defs>
         <linearGradient id={`${id}-bg`} x1="0" y1="0" x2="0.6" y2="1">

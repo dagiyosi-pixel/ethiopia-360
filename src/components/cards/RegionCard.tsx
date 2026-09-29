@@ -6,7 +6,7 @@ import { MetaRow } from "@/components/ui/Badge";
 import { cn, formatCompact } from "@/lib/utils";
 
 /**
- * Region card — location-forward: a full-bleed visual, the region name in both
+ * Region card , location-forward: a full-bleed visual, the region name in both
  * scripts, and the count of contributions so the card communicates volume.
  */
 export function RegionCard({
@@ -31,7 +31,7 @@ export function RegionCard({
       <MediaFrame
         src={region.image}
         artwork={region.artwork}
-        alt={`${region.name} — generated regional artwork`}
+        alt={region.imageAlt ?? (region.image ? region.imageSubject ?? region.name : `${region.name}, generated regional artwork`)}
         aspect={size === "lg" ? "16/9" : "4/3"}
         scrim
         rounded={false}

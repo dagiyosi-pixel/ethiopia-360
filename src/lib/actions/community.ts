@@ -17,6 +17,11 @@ const UNCONFIGURED_MESSAGE =
   "Not saved. This build has no database connected, so nothing was written. Add the Supabase environment variables in .env.local to persist contributions.";
 
 const UNAUTHENTICATED_MESSAGE = "Sign in to do that.";
+const TARGET_TYPES: SocialTarget[] = ["post", "place", "story", "photo", "video"];
+
+function validTarget(targetType: string, targetId: string): targetType is SocialTarget {
+  return TARGET_TYPES.includes(targetType as SocialTarget) && /^[a-zA-Z0-9._-]{1,120}$/.test(targetId);
+}
 
 function unauth(action: string): SocialResult {
   return { ok: false, code: "unauthenticated", message: `${UNAUTHENTICATED_MESSAGE} (${action})` };
@@ -53,21 +58,41 @@ async function toggleRelation(
 
   if (readError) return { added: false, error: readError.message };
 
+  const counter = COUNTER_TABLES[targetType];
+  const adjust = (delta: 1 | -1) => supabase.rpc("adjust_counter", {
+    p_table: counter.table,
+    p_id: targetId,
+    p_column: table === "likes" ? counter.countColumn : "saves",
+    p_delta: delta,
+  });
+
   if (existing) {
+    // The RPC verifies this user's relation. Decrement before deleting it, and
+    // only remove the relation if the counter update succeeded.
+    const { error: counterError } = await adjust(-1);
+    if (counterError) return { added: false, error: counterError.message };
     const { error } = await supabase.from(table).delete().eq("id", existing.id);
+    if (error) await adjust(1);
     return { added: false, error: error?.message ?? null };
   }
 
   const { error } = await supabase
     .from(table)
     .insert({ user_id: userId, target_type: targetType, target_id: targetId });
-  return { added: true, error: error?.message ?? null };
+  if (error) return { added: false, error: error.message };
+  const { error: counterError } = await adjust(1);
+  if (counterError) {
+    await supabase.from(table).delete().eq("user_id", userId).eq("target_type", targetType).eq("target_id", targetId);
+    return { added: false, error: counterError.message };
+  }
+  return { added: true, error: null };
 }
 
 export async function toggleLikeAction(
   targetType: SocialTarget,
   targetId: string,
 ): Promise<SocialResult> {
+  if (!validTarget(targetType, targetId)) return { ok: false, code: "invalid", message: "That item could not be found." };
   const user = await getSessionUser();
   if (!user) return unauth("like");
   if (user.demo || !isSupabaseConfigured()) {
@@ -77,16 +102,6 @@ export async function toggleLikeAction(
   const { added, error } = await toggleRelation("likes", targetType, targetId, user.id);
   if (error) return { ok: false, code: "server_error", message: error };
 
-  const supabase = await getSupabaseServerClient();
-  if (supabase) {
-    await supabase.rpc("adjust_counter", {
-      p_table: COUNTER_TABLES[targetType].table,
-      p_id: targetId,
-      p_column: COUNTER_TABLES[targetType].countColumn,
-      p_delta: added ? 1 : -1,
-    });
-  }
-
   return { ok: true, code: "ok", message: added ? "Liked" : "Like removed" };
 }
 
@@ -94,6 +109,7 @@ export async function toggleSaveAction(
   targetType: SocialTarget,
   targetId: string,
 ): Promise<SocialResult> {
+  if (!validTarget(targetType, targetId)) return { ok: false, code: "invalid", message: "That item could not be found." };
   const user = await getSessionUser();
   if (!user) return unauth("save");
   if (user.demo || !isSupabaseConfigured()) {
@@ -102,16 +118,6 @@ export async function toggleSaveAction(
 
   const { added, error } = await toggleRelation("saves", targetType, targetId, user.id);
   if (error) return { ok: false, code: "server_error", message: error };
-
-  const supabase = await getSupabaseServerClient();
-  if (supabase) {
-    await supabase.rpc("adjust_counter", {
-      p_table: COUNTER_TABLES[targetType].table,
-      p_id: targetId,
-      p_column: "saves",
-      p_delta: added ? 1 : -1,
-    });
-  }
 
   return {
     ok: true,
@@ -125,6 +131,7 @@ export async function toggleSaveAction(
 /* ------------------------------------------------------------------------- */
 
 export async function toggleFollowAction(targetUserId: string): Promise<SocialResult> {
+  if (!/^[a-zA-Z0-9-]{8,80}$/.test(targetUserId)) return { ok: false, code: "invalid", message: "That profile could not be found." };
   const user = await getSessionUser();
   if (!user) return unauth("follow");
 
@@ -217,7 +224,7 @@ export async function addCommentAction(form: FormData): Promise<SocialResult> {
   if (error) return { ok: false, code: "server_error", message: error.message };
 
   const targetPath = form.get("revalidate");
-  if (typeof targetPath === "string" && targetPath.startsWith("/")) {
+  if (typeof targetPath === "string" && /^\/(?!\/)[a-zA-Z0-9/_-]{1,180}$/.test(targetPath)) {
     revalidatePath(targetPath);
   }
 
@@ -269,5 +276,5 @@ export async function submitReportAction(form: FormData): Promise<SocialResult> 
 
   if (error) return { ok: false, code: "server_error", message: error.message };
 
-  return { ok: true, code: "ok", message: "Thanks — this has been sent to the moderation queue." };
+  return { ok: true, code: "ok", message: "Thanks , this has been sent to the moderation queue." };
 }

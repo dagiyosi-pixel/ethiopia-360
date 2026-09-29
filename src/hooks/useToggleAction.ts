@@ -41,7 +41,7 @@ export function useToggleAction({
         const result = await onToggle(next);
 
         if (!result.ok) {
-          // Revert — never leave the UI implying something succeeded.
+          // Revert , never leave the UI implying something succeeded.
           setActive(!next);
           setCount((current) => (current === null ? current : Math.max(0, current + (next ? -1 : 1))));
           toast({

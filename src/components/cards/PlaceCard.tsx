@@ -32,7 +32,7 @@ export function PlaceCard({
       <Link
         href={`/place/${place.slug}`}
         className={cn(
-          "premium-card group grid overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:border-white/20 sm:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]",
+          "premium-card group isolate grid min-w-0 grid-cols-1 overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:border-white/20 sm:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]",
           className,
         )}
       >
@@ -42,10 +42,10 @@ export function PlaceCard({
           alt={place.name}
           aspect="4/3"
           rounded={false}
-          className="sm:h-full"
+          className="w-full min-w-0 sm:aspect-auto sm:h-full sm:min-h-[16rem]"
           sizes="(max-width: 640px) 100vw, 45vw"
         />
-        <div className="flex flex-col gap-3 p-6">
+        <div className="relative z-10 flex min-w-0 flex-col gap-3 p-5 sm:p-6">
           <Badge tone={CATEGORY_TONES[place.category]}>{place.category}</Badge>
           <h3 className="font-display text-2xl leading-tight text-white transition-colors group-hover:text-gold-400">
             {place.name}

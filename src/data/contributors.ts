@@ -1,7 +1,7 @@
 import type { Contributor } from "@/types";
 
 /**
- * DEMO SEED DATA — contributors.
+ * DEMO SEED DATA , contributors.
  * These are fictional demo accounts used to populate listings during
  * development. They are not real people and should be replaced by real
  * profiles once the platform is live.

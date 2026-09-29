@@ -42,7 +42,12 @@ export default async function RegionPage({ params }: { params: Promise<{ slug: s
       <div className="mx-auto max-w-shell px-4 py-10 sm:px-8">
         <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr]">
           <div className="overflow-hidden rounded-[1.75rem] border border-white/10 bg-ink-850/80">
-            <MediaFrame src={region.image} artwork={region.artwork} alt={region.name} aspect="16/9" rounded={false} priority />
+            <MediaFrame src={region.image} artwork={region.artwork} alt={region.imageAlt ?? region.name} aspect="16/9" rounded={false} priority />
+            {region.imageSource && region.image && (
+              <p className="p-3 text-xs leading-relaxed text-ink-400">
+                {region.imageSubject ? `${region.imageSubject}. ` : ""}{region.imageSource}
+              </p>
+            )}
           </div>
           <div className="rounded-[1.75rem] border border-white/10 bg-ink-850/80 p-6">
             <p className="text-[11px] uppercase tracking-wider3 text-gold-500">Quick facts</p>

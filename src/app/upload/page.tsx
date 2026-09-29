@@ -1,26 +1,15 @@
+import Link from "next/link";
 import { PageHeader } from "@/components/ui/SectionHeading";
-import { ButtonLink } from "@/components/ui/Button";
+import { UploadForm } from "@/components/upload/UploadForm";
+import { getSessionUser } from "@/lib/auth";
+import { listCities, listRegions } from "@/lib/data/queries";
 
-export default function UploadPage() {
-  return (
-    <div>
-      <PageHeader
-        eyebrow="Contribute"
-        title="Upload a place, story or photo"
-        lede="This workspace includes the upload flow and validation layer, but the current build is running in demo mode without a live Supabase storage bucket."
-      />
-
-      <div className="mx-auto max-w-shell px-4 py-10 sm:px-8">
-        <div className="mx-auto max-w-xl rounded-[1.75rem] border border-white/10 bg-ink-850/80 p-6 sm:p-8">
-          <p className="text-sm leading-relaxed text-ink-300">
-            Upload actions are intentionally gated until a Supabase project is configured. The interface is fully wired for future publishing, but it will not complete an upload until the project is connected.
-          </p>
-          <div className="mt-6 flex flex-wrap gap-3">
-            <ButtonLink href="/explore">Explore the atlas</ButtonLink>
-            <ButtonLink href="/stories" variant="outline">Read stories</ButtonLink>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+export default async function UploadPage() {
+  const [user, regionPage, cityPage] = await Promise.all([getSessionUser(), listRegions(), listCities()]);
+  return <div><PageHeader eyebrow="Contribute" title="Add to the Ethiopia atlas" lede="Share a destination, story, image or cultural record with the community." />
+    <div className="mx-auto max-w-shell px-4 py-10 sm:px-8"><section className="mx-auto max-w-2xl rounded-[1.75rem] border border-white/10 bg-ink-850/80 p-6 sm:p-8">
+      {!user ? <div className="space-y-4"><p className="text-ink-300">Sign in before submitting a contribution.</p><Link className="text-gold-400 underline" href="/login?next=%2Fupload">Sign in to continue</Link></div> :
+        <UploadForm regions={regionPage.items.map(({ slug, name }) => ({ slug, name }))} cities={cityPage.items.map(({ slug, name, regionSlug }) => ({ slug, name, regionSlug }))} />}
+    </section></div>
+  </div>;
 }

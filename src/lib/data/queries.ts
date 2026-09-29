@@ -10,8 +10,10 @@ import type {
   CultureTopic,
   DataSource,
   HistoricalEntry,
+  MapMarker,
   MediaItem,
   Place,
+  Provenance,
   Region,
   Story,
   Artwork,
@@ -30,6 +32,7 @@ import { contributors as seedContributors } from "@/data/contributors";
 import { history as seedHistory } from "@/data/history";
 import { cultureTopics as seedCulture } from "@/data/culture";
 import { architectureEntries as seedArchitecture } from "@/data/architecture";
+import { withCuratedVisual } from "@/data/images";
 
 /* ------------------------------------------------------------------------- */
 /* Low-level helpers                                                          */
@@ -76,8 +79,47 @@ function slugOf(relation: unknown): string | undefined {
   return undefined;
 }
 
+/** Image provenance columns. Kept in one helper so every mapper stays honest. */
+function imageFields(r: Row) {
+  return {
+    image: str(r.image_url) || null,
+    imageSource: str(r.image_source) || null,
+    imageSubject: str(r.image_subject) || null,
+    imageAlt: str(r.image_alt) || null,
+  };
+}
+
+function optionalCoords(lat: unknown, lng: unknown): Coords | null {
+  const hasLat = lat !== null && lat !== undefined && lat !== "";
+  const hasLng = lng !== null && lng !== undefined && lng !== "";
+  if (!hasLat || !hasLng) return null;
+  const parsed = { lat: num(lat, NaN), lng: num(lng, NaN) };
+  if (!Number.isFinite(parsed.lat) || !Number.isFinite(parsed.lng)) return null;
+  return parsed;
+}
+
+/**
+ * Seed/demo records all use `u-*` ids for fictional contributors. Anything else
+ * came from a real account, so the map and cards can label it as community
+ * content instead of implying editorial provenance.
+ */
+export function provenanceOf(ownerId: string | undefined | null): Provenance {
+  if (!ownerId) return "community";
+  return ownerId.startsWith("u-") ? "curated" : "community";
+}
+
+
 function page<T>(items: T[], source: DataSource): ContentPage<T> {
   return { items, total: items.length, source };
+}
+
+function contentKey(value: unknown): string | null {
+  if (!value || typeof value !== "object") return null;
+  const row = value as Record<string, unknown>;
+  for (const field of ["slug", "username", "id"]) {
+    if (typeof row[field] === "string" && row[field]) return `${field}:${row[field]}`;
+  }
+  return null;
 }
 
 /**
@@ -102,7 +144,13 @@ async function query<T>(
       return page(fallback, "demo");
     }
     const rows = Array.isArray(data) ? (data as Row[]) : [];
-    return page(map(rows), "supabase");
+    // A newly-created Supabase table may be empty, and a partial live dataset
+    // should not hide the curated records. Live rows replace matching seed
+    // slugs; unrelated editorial and community entries remain available.
+    const combined = [...fallback, ...map(rows)];
+    const unique = new Map<string, T>();
+    combined.forEach((item, index) => unique.set(contentKey(item) ?? `row:${index}`, item));
+    return page([...unique.values()], "supabase");
   } catch (error) {
     console.warn("[data] unexpected query error, using seed data", error);
     return page(fallback, "demo");
@@ -125,6 +173,7 @@ const mapRegion = (r: Row): Region => ({
   summary: str(r.summary),
   description: str(r.description),
   artwork: artwork(r.artwork),
+  ...imageFields(r),
   landscape: str(r.landscape),
   languages: strArray(r.languages),
   stats: {
@@ -148,6 +197,7 @@ const mapCity = (r: Row): City => ({
   summary: str(r.summary),
   description: str(r.description),
   artwork: artwork(r.artwork),
+  ...imageFields(r),
   elevationM: num(r.elevation_m, 0) || undefined,
   knownFor: strArray(r.known_for),
   landmarks: strArray(r.landmarks),
@@ -182,6 +232,8 @@ const mapStory = (r: Row): Story => ({
   category: (r.category ?? "stories") as Category,
   tags: strArray(r.tags),
   artwork: artwork(r.artwork),
+  ...imageFields(r),
+  coords: optionalCoords(r.lat, r.lng),
   readMinutes: num(r.read_minutes, 4),
   likes: num(r.likes),
   comments: num(r.comments),
@@ -206,6 +258,10 @@ const mapMedia = (r: Row): MediaItem => ({
   artwork: artwork(r.artwork),
   src: typeof r.asset_url === "string" ? r.asset_url : null,
   poster: typeof r.poster_url === "string" ? r.poster_url : null,
+  coords: optionalCoords(r.lat, r.lng),
+  imageSource: str(r.image_source) || null,
+  imageSubject: str(r.image_subject) || null,
+  imageAlt: str(r.image_alt) || null,
   durationSec: num(r.duration_sec, 0) || undefined,
   orientation: (r.orientation ?? "landscape") as MediaItem["orientation"],
   likes: num(r.likes),
@@ -237,8 +293,11 @@ const mapHistory = (r: Row): HistoricalEntry => ({
   detail: strArray(r.detail),
   location: str(r.location),
   regionSlug: slugOf(r.region) ?? (typeof r.region_slug === "string" ? r.region_slug : undefined),
+  citySlug: slugOf(r.city) ?? (typeof r.city_slug === "string" ? r.city_slug : undefined),
+  authorId: typeof r.author_id === "string" ? r.author_id : undefined,
   coords: r.lat != null && r.lng != null ? coords(r.lat, r.lng) : undefined,
   artwork: artwork(r.artwork),
+  ...imageFields(r),
   tags: strArray(r.tags),
   sourceNote: str(r.source_note),
 });
@@ -251,7 +310,10 @@ const mapCulture = (r: Row): CultureTopic => ({
   summary: str(r.summary),
   description: strArray(r.description),
   regionSlug: slugOf(r.region) ?? (typeof r.region_slug === "string" ? r.region_slug : undefined),
+  citySlug: slugOf(r.city) ?? (typeof r.city_slug === "string" ? r.city_slug : undefined),
+  coords: optionalCoords(r.lat, r.lng),
   artwork: artwork(r.artwork),
+  ...imageFields(r),
   tags: strArray(r.tags),
   contributorId: typeof r.author_id === "string" ? r.author_id : undefined,
   sourceNote: str(r.source_note),
@@ -268,6 +330,7 @@ const mapArchitecture = (r: Row): ArchitectureEntry => ({
   summary: str(r.summary),
   description: strArray(r.description),
   artwork: artwork(r.artwork),
+  ...imageFields(r),
   contributorId: str(r.author_id),
   tags: strArray(r.tags),
   likes: num(r.likes),
@@ -284,10 +347,11 @@ const mapPlace = (r: Row): Place => ({
   category: (r.category ?? "landmark") as Place["category"],
   regionSlug: slugOf(r.region) ?? str(r.region_slug),
   citySlug: slugOf(r.city) ?? (typeof r.city_slug === "string" ? r.city_slug : undefined),
-  coords: coords(r.lat, r.lng),
+  coords: optionalCoords(r.lat, r.lng),
   summary: str(r.summary),
   description: strArray(r.description),
   artwork: artwork(r.artwork),
+  ...imageFields(r),
   contributorId: str(r.author_id ?? r.contributor_id),
   tags: strArray(r.tags),
   likes: num(r.likes),
@@ -308,7 +372,10 @@ export async function listRegions(): Promise<ContentPage<Region>> {
       const response = await c.from("regions").select("*").order("name");
       return { data: response.data, error: response.error };
     },
-    (rows) => rows.map(mapRegion),
+    (rows) => rows.map((row) => {
+      const region = mapRegion(row);
+      return region.image ? region : withCuratedVisual(region, region.name);
+    }),
     seedRegions,
   );
 }
@@ -375,7 +442,7 @@ export async function listMedia(): Promise<ContentPage<MediaItem>> {
 export async function listHistory(): Promise<ContentPage<HistoricalEntry>> {
   return query(
     async (c) => {
-      const response = await c.from("historical_entries").select("*").order("sort_year");
+      const response = await c.from("historical_entries").select("*, region:regions(slug), city:cities(slug)").eq("status", "published").order("sort_year");
       return { data: response.data, error: response.error };
     },
     (rows) => rows.map(mapHistory),
@@ -386,7 +453,7 @@ export async function listHistory(): Promise<ContentPage<HistoricalEntry>> {
 export async function listCulture(): Promise<ContentPage<CultureTopic>> {
   return query(
     async (c) => {
-      const response = await c.from("culture_topics").select("*, region:regions(slug)").order("name");
+      const response = await c.from("culture_topics").select("*, region:regions(slug), city:cities(slug)").eq("status", "published").order("name");
       return { data: response.data, error: response.error };
     },
     (rows) => rows.map(mapCulture),
@@ -397,7 +464,7 @@ export async function listCulture(): Promise<ContentPage<CultureTopic>> {
 export async function listArchitecture(): Promise<ContentPage<ArchitectureEntry>> {
   return query(
     async (c) => {
-      const response = await c.from("architecture_entries").select(CONTENT_SELECT).order("name");
+      const response = await c.from("architecture_entries").select(CONTENT_SELECT).eq("status", "published").order("name");
       return { data: response.data, error: response.error };
     },
     (rows) => rows.map(mapArchitecture),
@@ -667,4 +734,258 @@ export async function getArchitectureByContributor(authorId: string): Promise<Ar
   const all = await listArchitecture();
   return all.items.filter((a) => a.contributorId === authorId);
 }
+
+/* ------------------------------------------------------------------------- */
+/* Map                                                                        */
+/* ------------------------------------------------------------------------- */
+
+/**
+ * Every geographic point the platform can plot, normalised into one shape.
+ *
+ * The map is therefore never a separate hand-maintained list: curated seed
+ * content and published community contributions flow through the same query
+ * layer, so an upload with a region/city or coordinates becomes discoverable on
+ * the map as soon as it is published. Items without a usable point are skipped
+ * rather than dropped onto a guessed location.
+ */
+export async function getMapMarkers(): Promise<{ markers: MapMarker[]; source: DataSource }> {
+  const [regions, cities, places, stories, media, history, culture, architecture] = await Promise.all([
+    listRegions(),
+    listCities(),
+    listPlaces(),
+    listStories(),
+    listMedia(),
+    listHistory(),
+    listCulture(),
+    listArchitecture(),
+  ]);
+
+  const regionName = new Map(regions.items.map((region) => [region.slug, region.name]));
+  const markers: MapMarker[] = [];
+
+  for (const region of regions.items) {
+    markers.push({
+      id: `region:${region.slug}`,
+      kind: "region",
+      slug: region.slug,
+      title: region.name,
+      subtitle: region.summary,
+      lat: region.coords.lat,
+      lng: region.coords.lng,
+      href: `/region/${region.slug}`,
+      regionSlug: region.slug,
+      regionName: region.name,
+      category: region.kind === "city-administration" ? "city administration" : "region",
+      provenance: "curated",
+      image: region.image ?? null,
+      imageAlt: region.imageAlt ?? null,
+      artwork: region.artwork,
+    });
+  }
+
+  for (const city of cities.items) {
+    markers.push({
+      id: `city:${city.slug}`,
+      kind: "city",
+      slug: city.slug,
+      title: city.name,
+      subtitle: city.summary,
+      lat: city.coords.lat,
+      lng: city.coords.lng,
+      href: `/city/${city.slug}`,
+      regionSlug: city.regionSlug,
+      regionName: regionName.get(city.regionSlug),
+      category: "city",
+      provenance: "curated",
+      image: city.image ?? null,
+      imageAlt: city.imageAlt ?? null,
+      artwork: city.artwork,
+    });
+  }
+
+  for (const place of places.items) {
+    if (!place.coords) continue;
+    markers.push({
+      id: `place:${place.slug}`,
+      kind: "place",
+      slug: place.slug,
+      title: place.name,
+      subtitle: place.summary,
+      lat: place.coords.lat,
+      lng: place.coords.lng,
+      href: `/place/${place.slug}`,
+      regionSlug: place.regionSlug,
+      regionName: regionName.get(place.regionSlug),
+      category: place.category,
+      provenance: provenanceOf(place.contributorId),
+      image: place.image ?? null,
+      imageAlt: place.imageAlt ?? null,
+      artwork: place.artwork,
+    });
+  }
+
+  for (const story of stories.items) {
+    const point = story.coords;
+    if (!point) continue;
+    markers.push({
+      id: `story:${story.slug}`,
+      kind: "story",
+      slug: story.slug,
+      title: story.title,
+      subtitle: story.excerpt,
+      lat: point.lat,
+      lng: point.lng,
+      href: `/story/${story.slug}`,
+      regionSlug: story.regionSlug,
+      regionName: story.regionSlug ? regionName.get(story.regionSlug) : undefined,
+      category: story.category,
+      provenance: provenanceOf(story.authorId),
+      image: story.image ?? null,
+      imageAlt: story.imageAlt ?? null,
+      artwork: story.artwork,
+    });
+  }
+
+  for (const item of media.items) {
+    const point = item.coords;
+    if (!point) continue;
+    markers.push({
+      id: `${item.type}:${item.slug}`,
+      kind: item.type,
+      slug: item.slug,
+      title: item.title,
+      subtitle: item.caption,
+      lat: point.lat,
+      lng: point.lng,
+      href: `/gallery/${item.slug}`,
+      regionSlug: item.regionSlug,
+      regionName: item.regionSlug ? regionName.get(item.regionSlug) : undefined,
+      category: item.category,
+      provenance: provenanceOf(item.authorId),
+      image: item.src ?? null,
+      imageAlt: item.imageAlt ?? item.title,
+      artwork: item.artwork,
+    });
+  }
+
+  for (const entry of history.items) {
+    if (!entry.coords) continue;
+    markers.push({
+      id: `history:${entry.slug}`, kind: "history", slug: entry.slug, title: entry.title,
+      subtitle: entry.summary, lat: entry.coords.lat, lng: entry.coords.lng,
+      href: `/history#${entry.slug}`, regionSlug: entry.regionSlug,
+      regionName: entry.regionSlug ? regionName.get(entry.regionSlug) : undefined,
+      category: entry.kind, provenance: provenanceOf(entry.authorId), image: entry.image ?? null,
+      imageAlt: entry.imageAlt ?? entry.title, artwork: entry.artwork,
+    });
+  }
+
+  for (const topic of culture.items) {
+    if (!topic.coords) continue;
+    markers.push({
+      id: `culture:${topic.slug}`, kind: "culture", slug: topic.slug, title: topic.name,
+      subtitle: topic.summary, lat: topic.coords.lat, lng: topic.coords.lng,
+      href: `/culture#${topic.slug}`, regionSlug: topic.regionSlug,
+      regionName: topic.regionSlug ? regionName.get(topic.regionSlug) : undefined,
+      category: topic.category, provenance: provenanceOf(topic.contributorId), image: topic.image ?? null,
+      imageAlt: topic.imageAlt ?? topic.name, artwork: topic.artwork,
+    });
+  }
+
+  for (const entry of architecture.items) {
+    if (!entry.coords) continue;
+    markers.push({
+      id: `architecture:${entry.slug}`, kind: "architecture", slug: entry.slug, title: entry.name,
+      subtitle: entry.summary, lat: entry.coords.lat, lng: entry.coords.lng,
+      href: `/architecture/${entry.slug}`, regionSlug: entry.regionSlug,
+      regionName: regionName.get(entry.regionSlug), category: entry.category,
+      provenance: provenanceOf(entry.contributorId), image: entry.image ?? null,
+      imageAlt: entry.imageAlt ?? entry.name, artwork: entry.artwork,
+    });
+  }
+
+  return { markers, source: places.source };
+}
+
+export async function getMediaItem(slug: string): Promise<MediaItem | null> {
+  const all = await listMedia();
+  return (
+    all.items.find((item) => item.slug === slug) ??
+    seedMedia.find((item) => item.slug === slug) ??
+    null
+  );
+}
+
+export async function getRelatedMedia(slug: string, limit = 4): Promise<MediaItem[]> {
+  const all = await listMedia();
+  const current = all.items.find((item) => item.slug === slug) ?? seedMedia.find((item) => item.slug === slug);
+  if (!current) return all.items.slice(0, limit);
+  return all.items
+    .filter((item) => item.slug !== slug)
+    .map((item) => ({
+      item,
+      score:
+        (item.citySlug && item.citySlug === current.citySlug ? 4 : 0) +
+        (item.regionSlug && item.regionSlug === current.regionSlug ? 2 : 0) +
+        (item.category === current.category ? 1 : 0) +
+        item.tags.filter((tag) => current.tags.includes(tag)).length,
+    }))
+    .sort((a, b) => b.score - a.score)
+    .slice(0, limit)
+    .map((entry) => entry.item);
+}
+
+/**
+ * Everything a media detail page needs: the item, its author, the place it was
+ * filed under and other media from the same area.
+ */
+export async function getMediaBundle(slug: string) {
+  const item = await getMediaItem(slug);
+  if (!item) return null;
+
+  const [author, region, city, related] = await Promise.all([
+    item.authorId ? getContributor(item.authorId) : Promise.resolve(null),
+    item.regionSlug ? getRegion(item.regionSlug) : Promise.resolve(null),
+    item.citySlug ? getCity(item.citySlug) : Promise.resolve(null),
+    getRelatedMedia(slug, 4),
+  ]);
+
+  return { item, author, region, city, related, provenance: provenanceOf(item.authorId) };
+}
+
+/** Place detail bundle: gallery, contributor and related reading in one read. */
+export async function getPlaceBundle(slug: string) {
+  const place = await getPlace(slug);
+  if (!place) return null;
+
+  const [region, city, storiesPage, mediaPage, contributor, related] = await Promise.all([
+    getRegion(place.regionSlug),
+    place.citySlug ? getCity(place.citySlug) : Promise.resolve(null),
+    listStories(),
+    listMedia(),
+    place.contributorId ? getContributor(place.contributorId) : Promise.resolve(null),
+    getRelatedPlaces(place.slug, 3),
+  ]);
+
+  const media = mediaPage.items.filter(
+    (item) => item.citySlug === place.citySlug || item.regionSlug === place.regionSlug,
+  );
+  const stories = storiesPage.items.filter(
+    (story) => story.citySlug === place.citySlug || story.regionSlug === place.regionSlug,
+  );
+
+  return {
+    place,
+    region,
+    city,
+    contributor,
+    media,
+    stories: stories.slice(0, 3),
+    related,
+    source: mediaPage.source,
+    provenance: provenanceOf(place.contributorId),
+    communityMedia: media.filter((item) => provenanceOf(item.authorId) === "community"),
+  };
+}
+
 

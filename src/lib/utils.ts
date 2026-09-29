@@ -33,7 +33,7 @@ export function formatNumber(value: number): string {
 
 export function formatDate(input: string | Date, opts?: Intl.DateTimeFormatOptions): string {
   const date = typeof input === "string" ? new Date(input) : input;
-  if (Number.isNaN(date.getTime())) return "—";
+  if (Number.isNaN(date.getTime())) return ",";
   return new Intl.DateTimeFormat("en", {
     year: "numeric",
     month: "short",
@@ -45,7 +45,7 @@ export function formatDate(input: string | Date, opts?: Intl.DateTimeFormatOptio
 
 export function relativeTime(input: string | Date): string {
   const date = typeof input === "string" ? new Date(input) : input;
-  if (Number.isNaN(date.getTime())) return "—";
+  if (Number.isNaN(date.getTime())) return ",";
   const diff = Date.now() - date.getTime();
   const mins = Math.round(diff / 60000);
   if (mins < 1) return "just now";
@@ -82,7 +82,7 @@ export function initials(name: string): string {
     .join("");
 }
 
-/** Deterministic 32-bit hash — used to seed procedural artwork and palettes. */
+/** Deterministic 32-bit hash , used to seed procedural artwork and palettes. */
 export function hashString(input: string): number {
   let hash = 2166136261;
   for (let i = 0; i < input.length; i += 1) {

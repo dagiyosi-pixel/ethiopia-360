@@ -33,7 +33,7 @@ const ToastContext = createContext<ToastContextValue | null>(null);
 const TONE_STYLES: Record<ToastTone, string> = {
   success: "border-highland-500/40 bg-highland-600/15",
   error: "border-rift-500/45 bg-rift-600/15",
-  info: "border-nile-500/40 bg-nile-500/12",
+  info: "border-nile-500/40 bg-nile-500/15",
 };
 
 const TONE_ICON: Record<ToastTone, ReactNode> = {
@@ -118,7 +118,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
 export function useToast(): ToastContextValue {
   const ctx = useContext(ToastContext);
   if (!ctx) {
-    // Never throw from a UI helper — fall back to console so a missing provider
+    // Never throw from a UI helper , fall back to console so a missing provider
     // degrades rather than crashing a page.
     return {
       toast: ({ message, detail }) => console.info(`[toast] ${message}`, detail ?? ""),

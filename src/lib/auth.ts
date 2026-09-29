@@ -13,7 +13,7 @@ const MAX_AGE = 60 * 60 * 24 * 7;
 /**
  * The demo session only exists when Supabase is not configured AND we are not in
  * production. It is clearly labelled everywhere it surfaces in the UI, and it
- * grants no database access — server actions still refuse to persist anything.
+ * grants no database access , server actions still refuse to persist anything.
  */
 function sign(payload: string): string {
   return crypto.createHmac("sha256", demoSessionSecret()).update(payload).digest("base64url");

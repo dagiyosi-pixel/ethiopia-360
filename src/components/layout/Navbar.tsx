@@ -81,7 +81,7 @@ export function Navbar({ user }: { user: UserMenuUser | null }) {
       )}
     >
       <div className="mx-auto flex h-16 max-w-shell items-center gap-3 px-4 sm:h-18 sm:px-8">
-        <Link href="/" className="flex shrink-0 items-center gap-2.5" aria-label="ETHIOPIA//360 — home">
+        <Link href="/" className="flex shrink-0 items-center gap-2.5" aria-label="ETHIOPIA//360 , home">
           <svg viewBox="0 0 40 40" className="h-9 w-9" aria-hidden>
             <circle cx="20" cy="20" r="18.5" fill="none" stroke="rgba(255,255,255,0.14)" />
             <path
@@ -154,7 +154,7 @@ export function Navbar({ user }: { user: UserMenuUser | null }) {
       {open && (
         <div
           id="mobile-menu"
-          className="animate-fade-in border-t border-white/[0.08] bg-ink-950/97 px-4 pb-8 pt-4 backdrop-blur-xl lg:hidden"
+          className="animate-fade-in border-t border-white/[0.08] bg-ink-950/95 px-4 pb-8 pt-4 backdrop-blur-xl lg:hidden"
         >
           <ul className="grid gap-1">
             {PRIMARY_NAV.map((item) => (

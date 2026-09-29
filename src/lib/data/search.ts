@@ -81,7 +81,7 @@ function topN<T>(items: T[], limit: number): T[] {
 /**
  * Database-backed search.
  *
- * It loads the public collections and filters in memory — honest about its
+ * It loads the public collections and filters in memory , honest about its
  * limits (fine at the current catalogue size) and structured so it can be
  * swapped for Postgres full-text search (`search_vector` in `supabase/schema.sql`)
  * without changing any caller.

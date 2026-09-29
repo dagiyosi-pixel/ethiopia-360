@@ -10,7 +10,7 @@ export default function StoriesPage() {
       <PageHeader
         eyebrow="Stories"
         title="Essays and field notes from Ethiopia"
-        lede="Long-form writing connects geography, ritual and daily labour — the kind of context that maps alone cannot provide."
+        lede="Long-form writing connects geography, ritual and daily labour , the kind of context that maps alone cannot provide."
       />
 
       <div className="mx-auto max-w-shell px-4 py-10 sm:px-8">

@@ -2,7 +2,7 @@ export const SITE = {
   name: "ETHIOPIA//360",
   tagline: "One country. Thousands of stories.",
   description:
-    "A community-built digital record of Ethiopia: places, photographs, stories, history, culture and architecture — mapped, searchable and open to contribution.",
+    "A community-built digital record of Ethiopia: places, photographs, stories, history, culture and architecture , mapped, searchable and open to contribution.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
 } as const;
 

@@ -3,7 +3,7 @@ import { FOOTER_COLUMNS, SITE } from "@/lib/site";
 import { PatternDivider } from "@/components/ui/SectionHeading";
 
 const GEO_ATTRIBUTION =
-  "Region boundaries: geoBoundaries (ETH ADM1, CC BY 4.0). Map tiles © OpenStreetMap contributors, © CARTO.";
+  "Region boundaries: geoBoundaries (ETH ADM1, CC BY 4.0). Map data and tiles © OpenStreetMap contributors.";
 
 export function Footer() {
   const year = new Date().getFullYear();

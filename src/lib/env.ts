@@ -19,7 +19,6 @@ function readEnv(key: string): string | undefined {
 
 export const SUPABASE_URL = readEnv("NEXT_PUBLIC_SUPABASE_URL");
 export const SUPABASE_ANON_KEY = readEnv("NEXT_PUBLIC_SUPABASE_ANON_KEY");
-export const SUPABASE_SERVICE_ROLE_KEY = readEnv("SUPABASE_SERVICE_ROLE_KEY");
 export const STORAGE_BUCKET = readEnv("NEXT_PUBLIC_SUPABASE_STORAGE_BUCKET") ?? "media";
 
 export const SITE_URL =
@@ -35,10 +34,6 @@ export function isSupabaseConfigured(): boolean {
   } catch {
     return false;
   }
-}
-
-export function isServiceRoleConfigured(): boolean {
-  return isSupabaseConfigured() && Boolean(SUPABASE_SERVICE_ROLE_KEY);
 }
 
 /**
@@ -60,5 +55,4 @@ export const MODE: "supabase" | "demo" = isSupabaseConfigured() ? "supabase" : "
 export const MISSING_ENV: string[] = [
   ...(SUPABASE_URL ? [] : ["NEXT_PUBLIC_SUPABASE_URL"]),
   ...(SUPABASE_ANON_KEY ? [] : ["NEXT_PUBLIC_SUPABASE_ANON_KEY"]),
-  ...(SUPABASE_SERVICE_ROLE_KEY ? [] : ["SUPABASE_SERVICE_ROLE_KEY (optional, server-side only)"]),
 ];

@@ -10,6 +10,7 @@ const supabaseHost = (() => {
 
 const nextConfig = {
   reactStrictMode: true,
+  experimental: { serverActions: { bodySizeLimit: "210mb" } },
   images: {
     formats: ["image/avif", "image/webp"],
     remotePatterns: [

@@ -17,7 +17,7 @@ export default function ExplorePage() {
       <PageHeader
         eyebrow="Explore"
         title="Map the country through place and memory"
-        lede="A visual atlas of Ethiopia’s regions, cities, communities and landscapes — designed to feel like a living guide rather than a static archive."
+        lede="A visual atlas of Ethiopia’s regions, cities, communities and landscapes , designed to feel like a living guide rather than a static archive."
       />
 
       <div className="mx-auto max-w-shell px-4 py-10 sm:px-8 lg:py-12">

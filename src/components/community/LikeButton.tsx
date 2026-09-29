@@ -75,7 +75,7 @@ export function SaveButton({
         "inline-flex items-center gap-1.5 rounded-full border transition-colors",
         size === "sm" ? "px-2.5 py-1.5 text-xs" : "px-3.5 py-2 text-[13px]",
         active
-          ? "border-gold-500/50 bg-gold-500/12 text-gold-400"
+          ? "border-gold-500/50 bg-gold-500/15 text-gold-400"
           : "border-white/[0.12] text-ink-300 hover:border-white/25 hover:text-white",
         className,
       )}

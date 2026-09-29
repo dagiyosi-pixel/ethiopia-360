@@ -1,7 +1,7 @@
 import type { ArchitectureEntry } from "@/types";
 
 /**
- * DEMO SEED DATA — architecture.
+ * DEMO SEED DATA , architecture.
  * Illustrative development copy. Each entry carries a `sourceNote`; specific
  * dates, patrons and attributions must be sourced by an editor before they are
  * presented as fact. Append above SEED_ARCH_END.
@@ -163,7 +163,7 @@ export const architectureEntries: ArchitectureEntry[] = [
       "An accreted district where structure is provided by commodity, not by a master plan.",
     description: [
       "Merkato has almost no designed public space. Its logic is internal: each trade colonises a street or block, wholesale sits beside retail, and circulation paths follow the goods.",
-      "Studying it as architecture means studying logistics — where trucks can reach, where goods can be stored, how a lane widens just enough for a hand cart to turn.",
+      "Studying it as architecture means studying logistics , where trucks can reach, where goods can be stored, how a lane widens just enough for a hand cart to turn.",
     ],
     artwork: { palette: "gold", seed: 908, motif: "weave" },
     contributorId: "u-rahel",
@@ -184,7 +184,7 @@ export const architectureEntries: ArchitectureEntry[] = [
       "A public edge along the lake combining walkways, landings and resort frontage on the Rift floor.",
     description: [
       "The promenade is the city's main public room: a continuous edge where boats, anglers, walkers and hotel frontage meet the water.",
-      "It is also the clearest example in the city of how lake access is negotiated — between fishing livelihoods, tourism and public use.",
+      "It is also the clearest example in the city of how lake access is negotiated , between fishing livelihoods, tourism and public use.",
     ],
     artwork: { palette: "rift", seed: 909, motif: "contour" },
     contributorId: "u-meron",

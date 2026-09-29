@@ -1,7 +1,7 @@
 /**
  * User-generated text handling.
  *
- * The UI never renders raw HTML — all content is placed into React text nodes,
+ * The UI never renders raw HTML , all content is placed into React text nodes,
  * which already escapes. These helpers remove control characters, collapse
  * whitespace and cap length so stored data stays predictable, and give us one
  * place to extend if rich text is ever introduced.

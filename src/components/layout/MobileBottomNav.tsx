@@ -17,7 +17,7 @@ const ICONS: Record<string, typeof Compass> = {
 
 /**
  * Mobile bottom navigation. Four core destinations plus the upload CTA, which
- * is visually raised but still a plain link — no fake controls.
+ * is visually raised but still a plain link , no fake controls.
  */
 export function MobileBottomNav() {
   const pathname = usePathname();

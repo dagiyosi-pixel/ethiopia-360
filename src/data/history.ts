@@ -1,7 +1,7 @@
 import type { HistoricalEntry } from "@/types";
 
 /**
- * DEMO SEED DATA — history timeline.
+ * DEMO SEED DATA , history timeline.
  *
  * IMPORTANT: every entry below carries a `sourceNote`. These are development
  * placeholders written to exercise the timeline UI. Period labels are broad and
@@ -27,7 +27,7 @@ export const history: HistoricalEntry[] = [
     coords: { lat: 14.0, lng: 38.7 },
     artwork: { palette: "basalt", seed: 701, motif: "tower" },
     tags: ["archaeology", "trade", "prehistory"],
-    sourceNote: "PLACEHOLDER — needs citation. Add an academic reference before publishing.",
+    sourceNote: "PLACEHOLDER , needs citation. Add an academic reference before publishing.",
   },
   {
     slug: "aksumite-period",
@@ -39,14 +39,14 @@ export const history: HistoricalEntry[] = [
       "A major trading polity centred on Axum issues its own coinage and develops monumental architecture and script.",
     detail: [
       "Aksum appears in external written sources as a significant trading power, with its own coinage and a monumental funerary architecture of carved granite stelae.",
-      "Its script and language — Ge'ez — remain foundational to writing in the region today. The dating of individual monuments and the extent of Aksumite control at different points are debated in the literature.",
+      "Its script and language , Ge'ez , remain foundational to writing in the region today. The dating of individual monuments and the extent of Aksumite control at different points are debated in the literature.",
     ],
     location: "Axum",
     regionSlug: "tigray",
     coords: { lat: 14.1211, lng: 38.7237 },
     artwork: { palette: "basalt", seed: 702, motif: "tower" },
     tags: ["axum", "archaeology", "script", "trade"],
-    sourceNote: "PLACEHOLDER — needs citation.",
+    sourceNote: "PLACEHOLDER , needs citation.",
   },
   {
     slug: "adoption-of-christianity",
@@ -65,7 +65,7 @@ export const history: HistoricalEntry[] = [
     coords: { lat: 14.1211, lng: 38.7237 },
     artwork: { palette: "gold", seed: 703, motif: "arch" },
     tags: ["religion", "ezana", "manuscripts", "geez"],
-    sourceNote: "PLACEHOLDER — dates conventional in the literature; verify before publishing.",
+    sourceNote: "PLACEHOLDER , dates conventional in the literature; verify before publishing.",
   },
   {
     slug: "rock-hewn-church-tradition",
@@ -84,7 +84,7 @@ export const history: HistoricalEntry[] = [
     coords: { lat: 12.0317, lng: 39.0413 },
     artwork: { palette: "rift", seed: 704, motif: "arch" },
     tags: ["architecture", "religion", "lalibela", "tuff"],
-    sourceNote: "PLACEHOLDER — needs citation.",
+    sourceNote: "PLACEHOLDER , needs citation.",
   },
   {
     slug: "gondarine-period",
@@ -96,14 +96,14 @@ export const history: HistoricalEntry[] = [
       "A permanent royal capital is established at Gondar, producing a distinctive castle-and-church architecture.",
     detail: [
       "Gondar's foundation as a fixed capital changed the relationship between court and country: palaces, churches and a permanent urban population replaced a peripatetic royal camp.",
-      "The resulting building complex — the Fasil Ghebbi enclosure and its associated churches — is the clearest surviving expression of that period's architecture.",
+      "The resulting building complex , the Fasil Ghebbi enclosure and its associated churches , is the clearest surviving expression of that period's architecture.",
     ],
     location: "Gondar",
     regionSlug: "amhara",
     coords: { lat: 12.603, lng: 37.4521 },
     artwork: { palette: "gold", seed: 705, motif: "arch" },
     tags: ["gondar", "architecture", "capital", "castles"],
-    sourceNote: "PLACEHOLDER — needs citation.",
+    sourceNote: "PLACEHOLDER , needs citation.",
   },
   {
     slug: "harar-walled-city",
@@ -122,7 +122,7 @@ export const history: HistoricalEntry[] = [
     coords: { lat: 9.3117, lng: 42.1281 },
     artwork: { palette: "harar", seed: 706, motif: "arch" },
     tags: ["harar", "urban", "trade", "scholarship"],
-    sourceNote: "PLACEHOLDER — century is approximate; verify before publishing.",
+    sourceNote: "PLACEHOLDER , century is approximate; verify before publishing.",
   },
   {
     slug: "battle-of-adwa",
@@ -142,7 +142,7 @@ export const history: HistoricalEntry[] = [
     artwork: { palette: "rift", seed: 707, motif: "tower" },
     tags: ["1896", "commemoration", "northern-highlands"],
     sourceNote:
-      "PLACEHOLDER — placeholder text only. Must be replaced with sourced copy before publication.",
+      "PLACEHOLDER , placeholder text only. Must be replaced with sourced copy before publication.",
   },
   {
     slug: "railway-to-the-coast",
@@ -161,7 +161,7 @@ export const history: HistoricalEntry[] = [
     coords: { lat: 9.5931, lng: 41.8661 },
     artwork: { palette: "gold", seed: 708, motif: "tower" },
     tags: ["railway", "trade", "urban", "dire-dawa"],
-    sourceNote: "PLACEHOLDER — year approximate; needs citation.",
+    sourceNote: "PLACEHOLDER , year approximate; needs citation.",
   },
   {
     slug: "modern-federal-structure",
@@ -172,14 +172,14 @@ export const history: HistoricalEntry[] = [
     summary:
       "The country is organised as a federal republic of regional states, with several later splits and new units.",
     detail: [
-      "The current federal arrangement dates to the mid-1990s, and the number of regional states has changed several times since — including the creation of Sidama, South West Ethiopia and later reorganisations in the south.",
+      "The current federal arrangement dates to the mid-1990s, and the number of regional states has changed several times since , including the creation of Sidama, South West Ethiopia and later reorganisations in the south.",
       "This matters for any geographic platform: boundary datasets go out of date, which is why this project keeps boundary geometry separate from region records and labels approximate shapes explicitly.",
     ],
     location: "National",
     artwork: { palette: "entoto", seed: 709, motif: "weave" },
     tags: ["federalism", "geography", "administration"],
     sourceNote:
-      "PLACEHOLDER — general framing only. Verify specific dates and unit names against official sources.",
+      "PLACEHOLDER , general framing only. Verify specific dates and unit names against official sources.",
   },
   {
     slug: "digital-archive-era",
